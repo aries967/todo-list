@@ -1,0 +1,11 @@
+body {
+    min-height: 100vh;
+}
+
+main {
+    margin: 100px auto;
+    max-width: 60%;
+    padding: 20px;
+}
+
+
