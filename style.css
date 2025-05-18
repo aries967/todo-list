@@ -7,3 +7,7 @@ main {
     max-width: 60%;
     padding: 20px;
 }
+
+#todo-list input[type="checkbox"]:checked + span {
+    text-decoration: line-through;
+}

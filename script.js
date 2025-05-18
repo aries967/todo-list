@@ -9,8 +9,9 @@ window.addEventListener("load", () => {
 
 const addTodoItem = (value) => {
     let item = document.createElement("li");
-    item.textContent = value;
-    _createDeleteButton(item)
+    _createTodoCheckbox(item);
+    _createTodoText(item, value);
+    _createDeleteButton(item);
     list.appendChild(item);
 }
 
@@ -22,6 +23,19 @@ const _createDeleteButton = (parent) => {
         storeList();
     });
     parent.appendChild(deleteButton)
+}
+
+const _createTodoText = (parent, value) => {
+    let span = document.createElement("span");
+    let text = document.createTextNode(value);
+    span.appendChild(text);
+    parent.appendChild(span);
+}
+
+const _createTodoCheckbox = (parent) => {
+    let checkbox = document.createElement("input");
+    checkbox.setAttribute("type", "checkbox");
+    parent.appendChild(checkbox);
 }
 
 const storeList = () => {
