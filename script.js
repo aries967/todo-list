@@ -1,20 +1,21 @@
 const form = document.getElementById("todo-form");
 const input = form.querySelector("input");
 const list = document.getElementById("todo-list");
-let todoItems = JSON.parse(localStorage.getItem("items")) || [];
+let todoList = JSON.parse(localStorage.getItem("todoList")) || {items: [], idCounter: 0};
 
 
 window.addEventListener("load", () => {
-    todoItems.forEach(item => addTodoItem(item.id, item.name, item.completed))
+    todoList["items"].forEach(item => addTodoItem(item.id, item.name, item.completed))
 })
 
 form.addEventListener("submit", (e) => {
     e.preventDefault();
 
     if (input.value != "") {
-        addTodoItem(todoItems.length + 1, input.value);
-        todoItems.push({id: todoItems.length + 1, name: input.value, completed: false})
-        storeList(input.value);
+        addTodoItem(todoList["idCounter"] + 1, input.value);
+        todoList["items"].push({id: todoList["idCounter"]+1, name: input.value, completed: false})
+        todoList["idCounter"] += 1;
+        storeList();
         input.value = "";
     }
 })
@@ -34,7 +35,7 @@ const _createDeleteButton = (parent) => {
     deleteButton.classList.add("delete-button")
     deleteButton.addEventListener("click", () => {
         parent.remove();
-        todoItems = todoItems.filter(item => item.id != parent.dataset.id);
+        todoList["items"] = todoList["items"].filter(item => item.id != parent.dataset.id);
         storeList();
     });
     parent.appendChild(deleteButton)
@@ -52,13 +53,13 @@ const _createTodoCheckbox = (parent, checked) => {
     checkbox.setAttribute("type", "checkbox");
     if (checked) checkbox.checked = true;
     checkbox.addEventListener("change", () => {
-        todoItems = todoItems.map(item => item.id == parent.dataset.id ? {...item, completed: checkbox.checked} : item);
+        todoList["items"] = todoList["items"].map(item => item.id == parent.dataset.id ? {...item, completed: checkbox.checked} : item);
         storeList();
     })
     parent.appendChild(checkbox);
 }
 
 const storeList = () => {
-    localStorage.setItem("items", JSON.stringify(todoItems));
+    localStorage.setItem("todoList", JSON.stringify(todoList));
 }
 
