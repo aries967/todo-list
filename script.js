@@ -31,6 +31,7 @@ const addTodoItem = (id, value, completed=false) => {
 const _createDeleteButton = (parent) => {
     let deleteButton = document.createElement("button");
     deleteButton.innerHTML = "x";
+    deleteButton.classList.add("delete-button")
     deleteButton.addEventListener("click", () => {
         parent.remove();
         todoItems = todoItems.filter(item => item.id != parent.dataset.id);
