@@ -61,9 +61,22 @@ main {
     text-decoration: line-through;
 }
 
+#todo-list .todo-name {
+    
+}
+
+#todo-list .todo-name:disabled{
+    background: transparent;
+    color: black;
+    border: none;
+}
+
+.edit-button {
+    margin-left: auto;
+}
+
 .delete-button {
     background-color: rgb(183, 0, 0);
     color: white;
-    margin-left: auto;
 }
 

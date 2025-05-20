@@ -18,13 +18,14 @@ form.addEventListener("submit", (e) => {
         storeList();
         input.value = "";
     }
-})
+});
 
 const addTodoItem = (id, value, completed=false) => {
     let item = document.createElement("li");
     item.dataset.id = id;
     _createTodoCheckbox(item, completed);
-    _createTodoText(item, value);
+    _createTodoName(item, value);
+    _createEditButton(item)
     _createDeleteButton(item);
     list.appendChild(item);
 }
@@ -41,11 +42,12 @@ const _createDeleteButton = (parent) => {
     parent.appendChild(deleteButton)
 }
 
-const _createTodoText = (parent, value) => {
-    let span = document.createElement("span");
-    let text = document.createTextNode(value);
-    span.appendChild(text);
-    parent.appendChild(span);
+const _createTodoName = (parent, value) => {
+    let input = document.createElement("input");
+    input.value = value;
+    input.disabled = true;
+    input.classList.add("todo-name");
+    parent.appendChild(input);
 }
 
 const _createTodoCheckbox = (parent, checked) => {
@@ -57,6 +59,36 @@ const _createTodoCheckbox = (parent, checked) => {
         storeList();
     })
     parent.appendChild(checkbox);
+}
+
+const _createEditButton = (parent) => {
+    let button = document.createElement("button");
+    let input = parent.querySelector(".todo-name");
+    let isEditing = false;
+    button.classList.add("edit-button")
+
+    input.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+            todoList["items"] = todoList["items"].map(item => item.id == parent.dataset.id ? {...item, name: input.value} : item);
+            input.disabled = true;
+            isEditing = false;
+            button.innerHTML = "EDIT";
+            storeList();
+        }
+    })
+
+    button.addEventListener("click", () => {
+        input.disabled = !input.disabled;
+        isEditing = !isEditing;
+        button.innerHTML = isEditing ? "CANCEL" : "EDIT";
+        if (!isEditing) {
+            input.value = todoList["items"].filter(item => item.id == parent.dataset.id)[0]["name"];
+        }
+        if (input.disabled == false) input.focus();
+    })
+
+    button.innerHTML = "EDIT";
+    parent.appendChild(button);
 }
 
 const storeList = () => {
