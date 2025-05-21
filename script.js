@@ -69,7 +69,7 @@ const _createEditButton = (parent) => {
     button.classList.add("edit-button")
 
     input.addEventListener("keydown", (e) => {
-        if (e.key === "Enter") {
+        if (e.key === "Enter" && input.value !== "") {
             todoList.items = todoList.items.map(item => item.id == parent.dataset.id ? { ...item, name: input.value } : item);
             input.disabled = true;
             isEditing = false;
