@@ -3,6 +3,7 @@ const input = form.querySelector("input");
 const list = document.querySelector(".todo-list")
 const listComplete = document.querySelector(".todo-list-completed");
 const hideComplete = document.getElementById("hide-complete");
+let notificationTimeout;
 
 let todoList = JSON.parse(localStorage.getItem("todoList")) || { items: [], idCounter: 0 };
 
@@ -16,7 +17,7 @@ form.addEventListener("submit", (e) => {
     e.preventDefault();
 
     if (input.value != "") {
-        addTodoItem(todoList.idCounter + 1, input.value);
+        addTodoItem(todoList.idCounter + 1, input.value, completed=false, doer="user");
         todoList.items.push({ id: todoList.idCounter + 1, name: input.value, completed: false })
         todoList.idCounter += 1;
         storeList();
@@ -33,7 +34,7 @@ hideComplete.addEventListener("click", () => {
     }
 })
 
-const addTodoItem = (id, value, completed = false) => {
+const addTodoItem = (id, value, completed = false, doer="system") => {
     let item = document.createElement("li");
     item.dataset.id = id;
     _createTodoCheckbox(item, completed);
@@ -43,6 +44,9 @@ const addTodoItem = (id, value, completed = false) => {
     _createEditButton(item)
     _createDeleteButton(item);
 
+    if (doer === "user") {
+        showNotificationPopup(`Task "${value}" has been added`);
+    }
     if (completed) listComplete.append(item);
     if (!completed) list.append(item);
 }
@@ -52,6 +56,7 @@ const _createDeleteButton = (parent) => {
     deleteButton.innerHTML = "x";
     deleteButton.classList.add("delete-button")
     deleteButton.addEventListener("click", () => {
+        showNotificationPopup(`Task "${todoList.items.filter(item => item.id == parent.dataset.id)[0].name}" has been deleted`)
         parent.remove();
         todoList.items = todoList.items.filter(item => item.id != parent.dataset.id);
         storeList();
@@ -73,7 +78,9 @@ const _createTodoCheckbox = (parent, checked) => {
     if (checked) checkbox.checked = true;
     checkbox.addEventListener("change", () => {
         todoList.items = todoList.items.map(item => item.id == parent.dataset.id ? { ...item, completed: checkbox.checked } : item);
-        if (checkbox.checked == true) listComplete.append(parent);
+        if (checkbox.checked == true) {
+            listComplete.append(parent);
+        }
         if (checkbox.checked == false) list.append(parent);
         storeList();
     })
@@ -88,6 +95,7 @@ const _createEditButton = (parent) => {
 
     input.addEventListener("keydown", (e) => {
         if (e.key === "Enter" && input.value !== "") {
+            showNotificationPopup(`Task "${todoList.items.filter(item => item.id == parent.dataset.id)[0]["name"]}" successfully changed into "${input.value}"`)
             todoList.items = todoList.items.map(item => item.id == parent.dataset.id ? { ...item, name: input.value } : item);
             input.disabled = true;
             isEditing = false;
@@ -129,6 +137,7 @@ const _createReorderButtons = (parent, to = "top") => {
             let temp = todoList.items[index - 1];
             todoList.items[index - 1] = todoList.items[index];
             todoList.items[index] = temp;
+            showNotificationPopup(`Task Reordered`)
             storeList()
         };
         if (to === "bottom" && parent.nextSibling?.tagName == "LI") {
@@ -136,11 +145,22 @@ const _createReorderButtons = (parent, to = "top") => {
             let temp = todoList.items[index + 1];
             todoList.items[index + 1] = todoList.items[index];
             todoList.items[index] = temp;
+            showNotificationPopup(`Task Reordered`)
             storeList()
         }
     })
 
     parent.appendChild(button)
+}
+
+const showNotificationPopup = (text) => {
+    let popup = document.getElementById("notification-popup");
+    popup.style.display = "block";
+    if (notificationTimeout != undefined) clearTimeout(notificationTimeout)
+    popup.innerHTML = text;
+    notificationTimeout = setTimeout(() => {
+        popup.style.display = "none";
+    }, 3000)
 }
 
 const storeList = () => {
