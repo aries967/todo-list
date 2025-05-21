@@ -1,6 +1,9 @@
 const form = document.getElementById("todo-form");
 const input = form.querySelector("input");
 const list = document.getElementById("todo-list");
+const listComplete = document.getElementById("completed");
+const hideComplete = document.getElementById("hide-complete");
+
 let todoList = JSON.parse(localStorage.getItem("todoList")) || { items: [], idCounter: 0 };
 
 window.addEventListener("load", () => {
@@ -19,6 +22,15 @@ form.addEventListener("submit", (e) => {
     }
 });
 
+hideComplete.addEventListener("click", () => {
+    listComplete.classList.toggle("hide-items");
+    if (listComplete.classList.contains("hide-items")) {
+        hideComplete.innerHTML = "SHOW";
+    } else {
+        hideComplete.innerHTML = "HIDE";
+    }
+})
+
 const addTodoItem = (id, value, completed = false) => {
     let item = document.createElement("li");
     item.dataset.id = id;
@@ -28,7 +40,9 @@ const addTodoItem = (id, value, completed = false) => {
     _createReorderButtons(item, to = "bottom");
     _createEditButton(item)
     _createDeleteButton(item);
-    list.appendChild(item);
+
+    if (completed) listComplete.append(item);
+    if (!completed) listComplete.before(item);
 }
 
 const _createDeleteButton = (parent) => {
@@ -57,6 +71,8 @@ const _createTodoCheckbox = (parent, checked) => {
     if (checked) checkbox.checked = true;
     checkbox.addEventListener("change", () => {
         todoList.items = todoList.items.map(item => item.id == parent.dataset.id ? { ...item, completed: checkbox.checked } : item);
+        if (checkbox.checked == true) listComplete.append(parent);
+        if (checkbox.checked == false) listComplete.before(parent);
         storeList();
     })
     parent.appendChild(checkbox);

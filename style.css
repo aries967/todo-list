@@ -57,12 +57,8 @@ main {
     border-bottom: 1px solid #666;
 }
 
-#todo-list input[type="checkbox"]:checked + span {
+#todo-list input[type="checkbox"]:checked + input {
     text-decoration: line-through;
-}
-
-#todo-list .todo-name {
-    
 }
 
 #todo-list .todo-name:disabled{
@@ -80,3 +76,6 @@ main {
     color: white;
 }
 
+#completed.hide-items > li {
+    display: none;
+}
