@@ -3,7 +3,6 @@ const input = form.querySelector("input");
 const list = document.getElementById("todo-list");
 let todoList = JSON.parse(localStorage.getItem("todoList")) || {items: [], idCounter: 0};
 
-
 window.addEventListener("load", () => {
     todoList["items"].forEach(item => addTodoItem(item.id, item.name, item.completed))
 })
@@ -25,6 +24,8 @@ const addTodoItem = (id, value, completed=false) => {
     item.dataset.id = id;
     _createTodoCheckbox(item, completed);
     _createTodoName(item, value);
+    _createReorderButtons(item);
+    _createReorderButtons(item, to="bottom");
     _createEditButton(item)
     _createDeleteButton(item);
     list.appendChild(item);
@@ -89,6 +90,38 @@ const _createEditButton = (parent) => {
 
     button.innerHTML = "EDIT";
     parent.appendChild(button);
+}
+
+const _createReorderButtons = (parent, to="top") => {
+    let button = document.createElement("button");
+    if (to === "top") {
+        button.innerHTML = "^"
+    } else if (to === "bottom") {
+        button.innerHTML = "v"
+    }
+
+    button.addEventListener("click", () => {
+        console.log(parent, parent.previousSibling)
+        let parentCopy = parent.cloneNode(true);
+        let index = todoList["items"].findIndex((item) => item.id == parent.dataset.id)
+        console.log(index)
+        if (to === "top" && index !== 0) {
+            parent.previousSibling.before(parent);
+            let temp = todoList["items"][index - 1];
+            todoList["items"][index - 1] = todoList["items"][index];
+            todoList["items"][index] = temp;
+            storeList()
+        };
+        if (to === "bottom" && index !== todoList.length - 1) {
+            parent.nextSibling.after(parent);
+            let temp = todoList["items"][index + 1];
+            todoList["items"][index + 1] = todoList["items"][index];
+            todoList["items"][index] = temp;
+            storeList()
+        }
+    })
+
+    parent.appendChild(button)
 }
 
 const storeList = () => {
