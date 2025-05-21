@@ -1,10 +1,12 @@
 const form = document.getElementById("todo-form");
 const input = form.querySelector("input");
-const list = document.getElementById("todo-list");
-const listComplete = document.getElementById("completed");
+const list = document.querySelector(".todo-list")
+const listComplete = document.querySelector(".todo-list-completed");
 const hideComplete = document.getElementById("hide-complete");
 
 let todoList = JSON.parse(localStorage.getItem("todoList")) || { items: [], idCounter: 0 };
+
+console.log(list, listComplete)
 
 window.addEventListener("load", () => {
     todoList.items.forEach(item => addTodoItem(item.id, item.name, item.completed))
@@ -42,7 +44,7 @@ const addTodoItem = (id, value, completed = false) => {
     _createDeleteButton(item);
 
     if (completed) listComplete.append(item);
-    if (!completed) listComplete.before(item);
+    if (!completed) list.append(item);
 }
 
 const _createDeleteButton = (parent) => {
@@ -72,7 +74,7 @@ const _createTodoCheckbox = (parent, checked) => {
     checkbox.addEventListener("change", () => {
         todoList.items = todoList.items.map(item => item.id == parent.dataset.id ? { ...item, completed: checkbox.checked } : item);
         if (checkbox.checked == true) listComplete.append(parent);
-        if (checkbox.checked == false) listComplete.before(parent);
+        if (checkbox.checked == false) list.append(parent);
         storeList();
     })
     parent.appendChild(checkbox);
@@ -110,6 +112,7 @@ const _createEditButton = (parent) => {
 
 const _createReorderButtons = (parent, to = "top") => {
     let button = document.createElement("button");
+    button.classList.add("reorder-button")
     if (to === "top") {
         button.innerHTML = "^"
     } else if (to === "bottom") {
@@ -128,7 +131,7 @@ const _createReorderButtons = (parent, to = "top") => {
             todoList.items[index] = temp;
             storeList()
         };
-        if (to === "bottom" && index !== todoList.length - 1) {
+        if (to === "bottom" && parent.nextSibling?.tagName == "LI") {
             parent.nextSibling.after(parent);
             let temp = todoList.items[index + 1];
             todoList.items[index + 1] = todoList.items[index];

@@ -49,7 +49,7 @@ main {
     color: white;
 }
 
-#todo-list li {
+.todo-list li {
     display: flex;
     align-items: center;
     gap: 10px;
@@ -57,11 +57,11 @@ main {
     border-bottom: 1px solid #666;
 }
 
-#todo-list input[type="checkbox"]:checked + input {
+.todo-list input[type="checkbox"]:checked + input {
     text-decoration: line-through;
 }
 
-#todo-list .todo-name:disabled{
+.todo-list .todo-name:disabled{
     background: transparent;
     color: black;
     border: none;
@@ -76,6 +76,10 @@ main {
     color: white;
 }
 
-#completed.hide-items > li {
+.todo-list-completed.hide-items > li {
+    display: none;
+}
+
+.todo-list-completed .reorder-button {
     display: none;
 }
