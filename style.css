@@ -1,4 +1,5 @@
 * {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
     padding: 0;
     margin: 0;
     box-sizing: border-box;
@@ -22,7 +23,7 @@ body {
 
 main {
     margin: 100px auto;
-    max-width: 60%;
+    max-width: 80%;
     padding: 20px;
     border: 1px solid black;
     border-radius: 25px;
@@ -33,20 +34,34 @@ main {
 
 #todo-form {
     display: flex;
+    flex-direction: column;
     gap: 7px;
 }
 
-#todo-form input {
+#todo-form :is(input,textarea) {
     padding: 4px 8px;
     outline: none;
     border-radius: 5px;
     border: 1px solid #666;
-    flex-grow: 1;
 }
 
-#add-button {
+#todo-form textarea {
+    resize: none;
+    min-height: 100px;
+}
+
+#add-button, #submit-button {
     background-color: black;
     color: white;
+    width: fit-content;  
+}
+
+#add-button[data-active="true"] {
+    display: none;
+}
+
+#add-button[data-active="false"]  + #todo-form {
+    display: none;
 }
 
 .todo-list li {
@@ -57,8 +72,22 @@ main {
     border-bottom: 1px solid #666;
 }
 
-.todo-list input[type="checkbox"]:checked + input {
+.todo-list input[type="checkbox"]:checked + .todo-text-container {
     text-decoration: line-through;
+}
+
+.todo-list input[type="checkbox"]:checked + .todo-text-container > input {
+    text-decoration: line-through;
+}
+
+.todo-list .todo-name {
+    width: 100%;
+}
+
+.todo-list .todo-name:not(:disabled) {
+    padding: 4px 8px;
+    border-radius: 10px;
+    border: 1px solid black;
 }
 
 .todo-list .todo-name:disabled{
@@ -67,8 +96,26 @@ main {
     border: none;
 }
 
-.edit-button {
+.todo-list .todo-description {
+    font-size: 0.6em;
+    width: 100%;
+    overflow-wrap: anywhere;
+}
+
+.reorder-button:first-of-type {
     margin-left: auto;
+}
+
+.todo-list textarea.todo-description {
+    border-radius: 10px;
+    border: 1px solid black;
+    padding: 4px 8px;
+    width: 100%;
+    resize: none;
+}
+
+.edit-button {
+    /* margin-left: auto; */
 }
 
 .delete-button {
@@ -82,6 +129,10 @@ main {
 
 .todo-list-completed .reorder-button {
     display: none;
+}
+
+.todo-list-completed .edit-button {
+    margin-left: auto;
 }
 
 #notification-popup {

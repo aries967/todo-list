@@ -1,5 +1,8 @@
 const form = document.getElementById("todo-form");
-const input = form.querySelector("input");
+const nameInput = form.querySelector("input[name='task-name']");
+const descriptionInput = form.querySelector("textarea[name='task-description']");
+const addButton = document.getElementById("add-button");
+const cancelButton = form.querySelector("#cancel-button")
 const list = document.querySelector(".todo-list")
 const listComplete = document.querySelector(".todo-list-completed");
 const hideComplete = document.getElementById("hide-complete");
@@ -10,18 +13,19 @@ let todoList = JSON.parse(localStorage.getItem("todoList")) || { items: [], idCo
 console.log(list, listComplete)
 
 window.addEventListener("load", () => {
-    todoList.items.forEach(item => addTodoItem(item.id, item.name, item.completed))
+    todoList.items.forEach(item => addTodoItem(item.id, item.name, item.description, item.completed))
 });
 
 form.addEventListener("submit", (e) => {
     e.preventDefault();
 
-    if (input.value != "") {
-        addTodoItem(todoList.idCounter + 1, input.value, completed=false, doer="user");
-        todoList.items.push({ id: todoList.idCounter + 1, name: input.value, completed: false })
+    if (nameInput.value != "") {
+        addTodoItem(todoList.idCounter + 1, nameInput.value, descriptionInput.value, completed = false, doer = "user");
+        todoList.items.push({ id: todoList.idCounter + 1, name: nameInput.value, description: descriptionInput.value, completed: false })
         todoList.idCounter += 1;
         storeList();
-        input.value = "";
+        nameInput.value = "";
+        descriptionInput.value = "";
     }
 });
 
@@ -34,18 +38,34 @@ hideComplete.addEventListener("click", () => {
     }
 })
 
-const addTodoItem = (id, value, completed = false, doer="system") => {
+addButton.addEventListener("click", () => {
+    if (addButton.dataset.active == "false") {
+        addButton.dataset.active = "true";
+    } else {
+        addButton.dataset.active = "false";
+    }
+})
+
+cancelButton.addEventListener("click", () => {
+    addButton.dataset.active = "false";
+})
+
+const addTodoItem = (id, name, description, completed = false, doer = "system") => {
     let item = document.createElement("li");
     item.dataset.id = id;
     _createTodoCheckbox(item, completed);
-    _createTodoName(item, value);
+    let textContainer = document.createElement("div");
+    textContainer.classList.add("todo-text-container")
+    _createTodoName(textContainer, name);
+    _createTodoDescription(textContainer, description);
+    item.append(textContainer);
     _createReorderButtons(item);
     _createReorderButtons(item, to = "bottom");
     _createEditButton(item)
     _createDeleteButton(item);
 
     if (doer === "user") {
-        showNotificationPopup(`Task "${value}" has been added`);
+        showNotificationPopup(`Task "${name}" has been added`);
     }
     if (completed) listComplete.append(item);
     if (!completed) list.append(item);
@@ -72,6 +92,13 @@ const _createTodoName = (parent, value) => {
     parent.appendChild(input);
 }
 
+const _createTodoDescription = (parent, value) => {
+    let div = document.createElement("div");
+    div.textContent = value;
+    div.classList.add("todo-description");
+    parent.appendChild(div);
+}
+
 const _createTodoCheckbox = (parent, checked) => {
     let checkbox = document.createElement("input");
     checkbox.setAttribute("type", "checkbox");
@@ -89,29 +116,45 @@ const _createTodoCheckbox = (parent, checked) => {
 
 const _createEditButton = (parent) => {
     let button = document.createElement("button");
-    let input = parent.querySelector(".todo-name");
+    let taskName = parent.querySelector(".todo-name");
+    let taskDescription = parent.querySelector(".todo-description");
+    let confirmButton = document.createElement("button");
+    confirmButton.textContent = "CONFIRM";
+    confirmButton.classList.add("confirm-edit-button");
     let isEditing = false;
-    button.classList.add("edit-button")
+    button.classList.add("edit-button");
 
-    input.addEventListener("keydown", (e) => {
-        if (e.key === "Enter" && input.value !== "") {
-            showNotificationPopup(`Task "${todoList.items.filter(item => item.id == parent.dataset.id)[0]["name"]}" successfully changed into "${input.value}"`)
-            todoList.items = todoList.items.map(item => item.id == parent.dataset.id ? { ...item, name: input.value } : item);
-            input.disabled = true;
-            isEditing = false;
-            button.innerHTML = "EDIT";
-            storeList();
-        }
+    confirmButton.addEventListener("click", () => {
+        todoList.items = todoList.items.map(item => item.id == parent.dataset.id ? {...item, name: taskName.value, description: parent.querySelector(".todo-description").value} : item);
+        storeList();
+        taskDescription.textContent = parent.querySelector(".todo-description").value;
+        taskName.disabled = true;
+        parent.querySelector(".todo-description").remove();
+        taskName.after(taskDescription);
+        isEditing = false;
+        button.textContent = "EDIT";
+        parent.querySelector(".confirm-edit-button").remove()
     })
 
     button.addEventListener("click", () => {
-        input.disabled = !input.disabled;
         isEditing = !isEditing;
+        taskName.disabled = !taskName.disabled;
         button.innerHTML = isEditing ? "CANCEL" : "EDIT";
         if (!isEditing) {
-            input.value = todoList.items.filter(item => item.id == parent.dataset.id)[0]["name"];
+            taskName.value = todoList.items.filter(item => item.id == parent.dataset.id)[0]["name"];
+            parent.querySelector(".todo-description").remove();
+            taskName.after(taskDescription);
+            parent.querySelector(".confirm-edit-button").remove()
+        } else {
+            let textarea = document.createElement("textarea");
+            textarea.classList.add("todo-description");
+            textarea.rows = 3;
+            textarea.value = taskDescription.textContent;
+            taskDescription.after(confirmButton);
+            taskDescription.after(textarea);
+            taskDescription.remove();
         }
-        if (input.disabled == false) input.focus();
+        if (taskName.disabled == false) taskName.focus();
     })
 
     button.innerHTML = "EDIT";
