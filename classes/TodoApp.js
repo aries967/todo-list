@@ -63,10 +63,10 @@ export const TodoApp = class {
         }
     }
 
-    editItem(id, title, description) {
+    editItem(id, title, description, dueDate) {
         const item = this.findItemById(id);
         const prevTitle = item.title;
-        item.edit(title, description);
+        item.edit(title, description, dueDate);
         this.notification.show(`Task "${prevTitle}" successfully changed to "${item.title}"`);
     }
 

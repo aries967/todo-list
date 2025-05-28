@@ -28,6 +28,7 @@ export const TodoItem = class {
         this.checkboxElement = this.element.querySelector(".todo-item__checkbox")
         this.titleElement = this.element.querySelector(".todo-item__title");
         this.descriptionElement = this.element.querySelector(".todo-item__description");
+        this.dueDateElement = this.element.querySelector(".todo-item__due-date")
         this.confirmButton = this.element.querySelector(".todo-item__edit-confirm");
         this.editButton = this.element.querySelector(".todo-item__edit");
         this.#delegateClickEvents();
@@ -41,23 +42,27 @@ export const TodoItem = class {
         this.todoApp.todoListCompleted.appendItem(this);
     }
 
-    edit(title, description) {
+    edit(title, description, dueDate) {
         this.title = title;
         this.description = description;
+        this.dueDate = dueDate;
         this.titleElement.value = title;
         this.descriptionElement.textContent = description;
+        this.dueDateElement.textContent = dueDate;
     }
 
     toggleEditMode() {
         this.titleElement.disabled = !this.titleElement.disabled;
         this.editButton.textContent = this.editButton.textContent === "EDIT" ? "CANCEL" : "EDIT";
-        if (this.editButton.textContent === "EDIT") this.resetValues();
+        this.#switchDueDateElement();
         this.#switchDescriptionElementTag();
         this.#toggleConfirmButton();
+        if (this.editButton.textContent === "EDIT") this.resetValues();
     }
 
     resetValues() {
         this.titleElement.value = this.todoApp.findItemById(this.id).title;
+        this.dueDateElement.textContent = this.todoApp.findItemById(this.id).dueDate;
     }
 
     checkItem() {
@@ -70,6 +75,22 @@ export const TodoItem = class {
 
     swapWithNextSibling() {
         this.element.nextSibling.after(this.element);
+    }
+
+    #switchDueDateElement() {
+        if (this.dueDateElement.tagName === "DIV") {
+            const value = this.dueDateElement.textContent;
+            this.dueDateElement.textContent = "";
+            this.dueDateElement.outerHTML = this.dueDateElement.outerHTML.replace("div", "input").replace("</input>", "");
+            this.dueDateElement = this.element.querySelector(".todo-item__due-date");
+            this.dueDateElement.value = value;
+            this.dueDateElement.type = "date";
+        } else {
+            const value = this.dueDateElement.value;
+            this.dueDateElement.outerHTML = this.dueDateElement.outerHTML.concat("</input>").replace("input", "div");
+            this.dueDateElement = this.element.querySelector(".todo-item__due-date");
+            this.dueDateElement.textContent = value;
+        }
     }
 
     #switchDescriptionElementTag() {
@@ -91,12 +112,12 @@ export const TodoItem = class {
     }
 
     #handleClick(e) {
-        switch (e.target.className){
+        switch (e.target.className) {
             case "todo-item__checkbox":
-                 this.todoApp.completeItem(this.id, this.checkboxElement.checked);
-                 break;
+                this.todoApp.completeItem(this.id, this.checkboxElement.checked);
+                break;
             case "todo-item__edit-confirm":
-                this.todoApp.editItem(this.id, this.titleElement.value, this.descriptionElement.value);
+                this.todoApp.editItem(this.id, this.titleElement.value, this.descriptionElement.value, this.dueDateElement.value);
                 this.toggleEditMode();
                 break;
             case "todo-item__up":
