@@ -130,6 +130,8 @@ export const TodoItem = class {
             this.toggleEditMode();
         } else if (e.target.classList.contains("todo-item__delete")) {
             this.todoApp.deleteItem(this.id);
+        } else if ((e.target.classList.contains("todo-item__data-container") || e.target.classList.contains("todo-item__title") || e.target.classList.contains("todo-item__description") || e.target.classList.contains("todo-item__due-date")) && e.detail === 2 && this.descriptionElement.tagName === "DIV") {
+            this.toggleEditMode();
         }
     }
 }
