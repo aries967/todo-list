@@ -54,6 +54,14 @@ textarea#todo-form__description {
     min-height: 100px;
 }
 
+#todo-form__due-date {
+    max-width: 40%;
+    margin: 5px 0;
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid #666;
+}
+
 #todo-form__open, #todo-form__submit {
     background-color: black;
     color: white;
