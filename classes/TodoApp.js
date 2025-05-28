@@ -36,9 +36,9 @@ export const TodoApp = class {
         return this.items.findIndex(item => item.id === id);
     }
 
-    addItem(title, description) {
+    addItem(title, description, dueDate) {
         const id = this.items.length !== 0 ? Math.max(...this.items.map(i => i.id)) + 1 : 0;
-        const item = new TodoItem(id, title, description, false, this);
+        const item = new TodoItem(id, title, description, dueDate, false, this);
         this.todoList.appendHTML(item.html);
         item.setElementSelector(this.todoList.getItemSelector(id));
         this.notification.show(`Task "${title}" has been added`);
@@ -94,6 +94,7 @@ export const TodoApp = class {
             id: item.id,
             title: item.title,
             description: item.description,
+            dueDate: item.dueDate,
             completed: item.completed
         }))
 
@@ -102,7 +103,7 @@ export const TodoApp = class {
 
     getItemsFromLocal() {
         let items = JSON.parse(localStorage.getItem("items")) || [];
-        items = items.map(item => new TodoItem(item.id, item.title, item.description, item.completed, this));
+        items = items.map(item => new TodoItem(item.id, item.title, item.description, item.dueDate, item.completed, this));
         return items
     }
 }

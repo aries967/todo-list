@@ -4,6 +4,7 @@ export const TodoForm = class {
 
         this.element = document.getElementById("todo-form");
         this.titleControlElement = document.getElementById("todo-form__title");
+        this.dueDateControlElement = document.getElementById("todo-form__due-date");
         this.descriptionControlElement = document.getElementById("todo-form__description");
         this.openBtnElement = document.getElementById("todo-form__open");
         this.submitBtnElement = document.getElementById("todo-form__submit");
@@ -17,6 +18,7 @@ export const TodoForm = class {
     getValues() {
         return {
             title: this.titleControlElement.value,
+            dueDate: this.dueDateControlElement.value,
             description: this.descriptionControlElement.value
         }
     }
@@ -24,10 +26,10 @@ export const TodoForm = class {
     handleSubmit(e) {
         e.preventDefault();
 
-        const { title, description } = this.getValues();
+        const { title, dueDate, description } = this.getValues();
 
         if (title !== "") {
-            this.todoApp.addItem(title, description);
+            this.todoApp.addItem(title, description, dueDate);
             this.clear()
         }
     }

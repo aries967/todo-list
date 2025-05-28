@@ -1,9 +1,10 @@
 export const TodoItem = class {
-    constructor(id, title, description, completed, todoApp) {
+    constructor(id, title, description, dueDate, completed, todoApp) {
         this.todoApp = todoApp;
         this.id = id;
         this.title = title;
         this.description = description;
+        this.dueDate = dueDate;
         this.completed = completed;
         this.html = `
             <li class="todo-item" data-id=${this.id}>
@@ -11,6 +12,7 @@ export const TodoItem = class {
                 <div class="todo-item__data-container">
                     <input type="text" value="${this.title}" class="todo-item__title" disabled>
                     <div class="todo-item__description">${this.description}</div>
+                    <div class="todo-item__due-date">${this.dueDate}</div>
                     <button class="todo-item__edit-confirm hide">CONFIRM</button>
                 </div>
                 <button class="todo-item__up">^</button>
