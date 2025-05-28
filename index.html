@@ -5,29 +5,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
-    <script src="script.js" defer></script>
+    <script src="script.js" type="module" defer></script>
     <title>To-Do List</title>
 </head>
 
 <body>
-    <main>
+    <main id="todo-app">
         <h1>Your To Do</h1>
-        <button id="add-button" data-active="false">+ Add Task</button>
         <form action="" id="todo-form">
-            <input type="text" name="task-name" placeholder="Task Title...">
-            <textarea name="task-description" placeholder="description..." row="1"></textarea>
+            <button type="button" id="todo-form__open" data-active="false">+ Add Task</button>
+            <input type="text" name="todo-form__title" id="todo-form__title" placeholder="Title...">
+            <textarea name="todo-form__description" id="todo-form__description" placeholder="description..."
+                row="1"></textarea>
             <div class="button-group">
-                <button type="submit" id="submit-button">Done</button>
-                <button id="cancel-button">Cancel</button>
+                <button type="submit" id="todo-form__submit">Done</button>
+                <button type="button" id="todo-form__cancel">Cancel</button>
             </div>
 
         </form>
-        <ul class="todo-list">
+        <ul id="todo-list"></ul>
+        <ul id="todo-list-completed" data-hide="false">
+            <h2>Completed <button id="todo-list-completed__hide">HIDE</button></h2>
         </ul>
-        <ul class="todo-list todo-list-completed">
-            <h2>Completed <button id="hide-complete">HIDE</button></h2>
-        </ul>
-        <div id="notification-popup">
+        <div id="notification">
         </div>
     </main>
 </body>
