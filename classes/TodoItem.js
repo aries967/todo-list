@@ -117,28 +117,19 @@ export const TodoItem = class {
     }
 
     #handleClick(e) {
-        switch (e.target.className) {
-            case "todo-item__checkbox":
-                this.todoApp.completeItem(this.id, this.checkboxElement.checked);
-                break;
-            case "todo-item__edit-confirm":
-                this.todoApp.editItem(this.id, this.titleElement.value, this.descriptionElement.value, this.dueDateElement.value);
-                this.toggleEditMode();
-                break;
-            case "todo-item__up":
-                this.todoApp.moveItemUp(this.id);
-                break;
-            case "todo-item__down":
-                this.todoApp.moveItemDown(this.id);
-                break;
-            case "todo-item__edit":
-                this.toggleEditMode();
-                break;
-            case "todo-item__delete":
-                this.todoApp.deleteItem(this.id);
-                break;
-            default:
-                break;
+        if (e.target.classList.contains("todo-item__checkbox")) {
+            this.todoApp.completeItem(this.id, this.checkboxElement.checked);
+        } else if (e.target.classList.contains("todo-item__edit-confirm")) {
+            this.todoApp.editItem(this.id, this.titleElement.value, this.descriptionElement.value, this.dueDateElement.value);
+            this.toggleEditMode();
+        } else if (e.target.classList.contains("todo-item__up")) {
+            this.todoApp.moveItemUp(this.id);
+        } else if (e.target.classList.contains("todo-item__down")) {
+            this.todoApp.moveItemDown(this.id);
+        } else if (e.target.classList.contains("todo-item__edit")) {
+            this.toggleEditMode();
+        } else if (e.target.classList.contains("todo-item__delete")) {
+            this.todoApp.deleteItem(this.id);
         }
     }
 }
