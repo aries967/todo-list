@@ -1,11 +1,10 @@
 import { relativeDate } from "../functions.js";
 
 export const TodoItem = class {
-    constructor(id, title, description, dueDate, completed, todoApp) {
+    constructor(id, title, dueDate, completed, todoApp) {
         this.todoApp = todoApp;
         this.id = id;
         this.title = title;
-        this.description = description;
         this.dueDate = dueDate;
         this.completed = completed;
         this.setItemHTML();
@@ -22,7 +21,6 @@ export const TodoItem = class {
             </label>
             <div class="todo-item__data-container">
                 <input type="text" value="${this.title}" class="todo-item__title" disabled>
-                <div class="todo-item__description">${this.description}</div>
                 <div class="todo-item__due-date" data-value="${this.dueDate}"><i class="fa-regular fa-calendar"></i> ${relativeDate(new Date(Date.parse(this.dueDate)))}</div>
                 <button class="todo-item__edit-confirm hide">CONFIRM</button>
             </div>
@@ -39,7 +37,6 @@ export const TodoItem = class {
         this.checkboxElement = this.element.querySelector(".todo-item__checkbox")
         this.checkboxElementPlaceholder = this.element.querySelector(".todo-item__checkbox-placeholder");
         this.titleElement = this.element.querySelector(".todo-item__title");
-        this.descriptionElement = this.element.querySelector(".todo-item__description");
         this.dueDateElement = this.element.querySelector(".todo-item__due-date")
         this.confirmButton = this.element.querySelector(".todo-item__edit-confirm");
         this.editButton = this.element.querySelector(".todo-item__edit");
@@ -54,22 +51,16 @@ export const TodoItem = class {
         this.todoApp.todoListCompleted.appendItem(this);
     }
 
-    edit(title, description, dueDate) {
+    edit(title, dueDate) {
         this.title = title;
-        this.description = description;
         this.dueDate = dueDate;
         this.setItemHTML();
-        // this.titleElement.value = title;
-        // this.descriptionElement.textContent = description;
-        // this.dueDateElement.textContent = relativeDate(new Date(Date.parse(dueDate)));
-        // this.dueDateElement.dataset.value = dueDate
     }
 
     toggleEditMode() {
         this.titleElement.disabled = !this.titleElement.disabled;
         this.editButton.textContent = this.editButton.textContent === "EDIT" ? "CANCEL" : "EDIT";
         this.#switchDueDateElement();
-        this.#switchDescriptionElementTag();
         this.#toggleConfirmButton();
         if (this.editButton.textContent === "EDIT") this.resetValues();
     }
@@ -110,16 +101,6 @@ export const TodoItem = class {
         }
     }
 
-    #switchDescriptionElementTag() {
-        if (this.descriptionElement.tagName === "DIV") {
-            this.descriptionElement.outerHTML = this.descriptionElement.outerHTML.replaceAll("div", "textarea");
-            this.descriptionElement = this.element.querySelector(".todo-item__description")
-        } else {
-            this.descriptionElement.outerHTML = this.descriptionElement.outerHTML.replaceAll("textarea", "div");
-            this.descriptionElement = this.element.querySelector(".todo-item__description")
-        }
-    }
-
     #toggleCheckboxPlaceholder() {
         this.checkboxElementPlaceholder.dataset.completed = this.checkboxElement.checked;
     }
@@ -137,7 +118,7 @@ export const TodoItem = class {
             this.#toggleCheckboxPlaceholder();
             this.todoApp.completeItem(this.id, this.checkboxElement.checked);
         } else if (e.target.classList.contains("todo-item__edit-confirm")) {
-            this.todoApp.editItem(this.id, this.titleElement.value, this.descriptionElement.value, this.dueDateElement.value);
+            this.todoApp.editItem(this.id, this.titleElement.value, this.dueDateElement.value);
             this.toggleEditMode();
             this.todoApp.sorter.setSortedItems(this.todoApp.sortChoice);
             this.todoApp.renderList(this.todoApp.sorter.sortedItems);
@@ -149,7 +130,7 @@ export const TodoItem = class {
             this.toggleEditMode();
         } else if (e.target.classList.contains("todo-item__delete")) {
             this.todoApp.deleteItem(this.id);
-        } else if ((e.target.classList.contains("todo-item__data-container") || e.target.classList.contains("todo-item__title") || e.target.classList.contains("todo-item__description") || e.target.classList.contains("todo-item__due-date")) && e.detail === 2 && this.descriptionElement.tagName === "DIV") {
+        } else if ((e.target.classList.contains("todo-item__data-container") || e.target.classList.contains("todo-item__title") || e.target.classList.contains("todo-item__due-date")) && e.detail === 2 && this.descriptionElement.tagName === "DIV") {
             this.toggleEditMode();
         }
     }

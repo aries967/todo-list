@@ -6,7 +6,6 @@ export const TodoForm = class {
         this.newBtnElement = document.getElementById("todo-new")
         this.titleControlElement = document.getElementById("todo-form__title");
         this.dueDateControlElement = document.getElementById("todo-form__due-date");
-        this.descriptionControlElement = document.getElementById("todo-form__description");
         this.submitBtnElement = document.getElementById("todo-form__submit");
         this.cancelBtnElement = document.getElementById("todo-form__cancel");
 
@@ -19,17 +18,16 @@ export const TodoForm = class {
         return {
             title: this.titleControlElement.value,
             dueDate: this.dueDateControlElement.value,
-            description: this.descriptionControlElement.value
         }
     }
 
     handleSubmit(e) {
         e.preventDefault();
 
-        const { title, dueDate, description } = this.getValues();
+        const { title, dueDate } = this.getValues();
 
         if (title !== "") {
-            this.todoApp.addItem(title, description, dueDate);
+            this.todoApp.addItem(title, dueDate);
             this.clear()
         }
     }
