@@ -3,16 +3,16 @@ export const TodoForm = class {
         this.todoApp = todoApp;
 
         this.element = document.getElementById("todo-form");
+        this.newBtnElement = document.getElementById("todo-new")
         this.titleControlElement = document.getElementById("todo-form__title");
         this.dueDateControlElement = document.getElementById("todo-form__due-date");
         this.descriptionControlElement = document.getElementById("todo-form__description");
-        this.openBtnElement = document.getElementById("todo-form__open");
         this.submitBtnElement = document.getElementById("todo-form__submit");
         this.cancelBtnElement = document.getElementById("todo-form__cancel");
 
         this.element.addEventListener("submit", this.handleSubmit.bind(this));
-        this.openBtnElement.addEventListener("click", this.toggleOpenButton.bind(this));
-        this.cancelBtnElement.addEventListener("click", this.toggleOpenButton.bind(this));
+        this.newBtnElement.addEventListener("click", this.toggleNewButton.bind(this));
+        this.cancelBtnElement.addEventListener("click", this.toggleNewButton.bind(this));
     }
 
     getValues() {
@@ -34,9 +34,9 @@ export const TodoForm = class {
         }
     }
 
-    toggleOpenButton() {
+    toggleNewButton() {
         this.clear();
-        this.openBtnElement.dataset.active = this.openBtnElement.dataset.active === "false" ? "true" : "false";
+        this.element.dataset.active = this.element.dataset.active === "false" ? "true" : "false";
     }
 
     clear() {

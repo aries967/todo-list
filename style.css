@@ -35,6 +35,12 @@ body {
     display: none;
 }
 
+#todo-new, #todo-form__submit {
+    background-color: black;
+    color: white;
+    width: fit-content;  
+}
+
 #todo-app {
     margin: 0 auto;
     max-width: 700px;
@@ -49,6 +55,10 @@ body {
     display: flex;
     flex-direction: column;
     gap: 7px;
+}
+
+#todo-form[data-active="false"] {
+    display: none;
 }
 
 #todo-form__title, #todo-form__description {
@@ -69,20 +79,6 @@ textarea#todo-form__description {
     padding: 5px;
     border-radius: 5px;
     border: 1px solid #666;
-}
-
-#todo-form__open, #todo-form__submit {
-    background-color: black;
-    color: white;
-    width: fit-content;  
-}
-
-#todo-form__open[data-active="true"] {
-    display: none;
-}
-
-#todo-form__open[data-active="false"] ~ *{
-    display: none;
 }
 
 .todo-item{
