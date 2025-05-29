@@ -91,12 +91,33 @@ textarea#todo-form__description {
 
 .todo-item{
     display: flex;
-    align-items: center;
+    align-items: start;
     gap: 10px;
     padding: 8px 12px;
     border: 1px solid #ccc;
     border-radius: 10px;
     box-shadow: 2px 2px 2px #eee;
+}
+
+.todo-item__checkbox-placeholder {
+    display: inline-block;
+    color: white;
+    border: 1px solid #ccc;
+    padding: 3px 5px;
+    border-radius: 5px;
+    font-size: 10px;
+}
+
+.todo-item__checkbox-placeholder[data-completed="false"] i{
+    opacity: 0;
+}
+
+.todo-item__checkbox-placeholder[data-completed="true"] {
+    background-color: black;
+}
+
+.todo-item__checkbox {
+    display: none;
 }
 
 .todo-item__checkbox:checked + .todo-item__data-container > * {

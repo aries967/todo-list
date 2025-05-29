@@ -14,7 +14,12 @@ export const TodoItem = class {
     setItemHTML() {
         this.html = `
         <li class="todo-item" data-id=${this.id}>
-            <input type="checkbox" class="todo-item__checkbox">
+            <label>
+                <span class="todo-item__checkbox-placeholder" data-completed="false">
+                    <i class="fa-solid fa-check"></i>
+                </span>
+                <input type="checkbox" class="todo-item__checkbox">
+            </label>
             <div class="todo-item__data-container">
                 <input type="text" value="${this.title}" class="todo-item__title" disabled>
                 <div class="todo-item__description">${this.description}</div>
@@ -32,6 +37,7 @@ export const TodoItem = class {
     setElementSelector(element) {
         this.element = element;
         this.checkboxElement = this.element.querySelector(".todo-item__checkbox")
+        this.checkboxElementPlaceholder = this.element.querySelector(".todo-item__checkbox-placeholder");
         this.titleElement = this.element.querySelector(".todo-item__title");
         this.descriptionElement = this.element.querySelector(".todo-item__description");
         this.dueDateElement = this.element.querySelector(".todo-item__due-date")
@@ -75,6 +81,7 @@ export const TodoItem = class {
 
     checkItem() {
         this.checkboxElement.checked = true;
+        this.#toggleCheckboxPlaceholder();
     }
 
     swapWithPreviousSibling() {
@@ -113,6 +120,10 @@ export const TodoItem = class {
         }
     }
 
+    #toggleCheckboxPlaceholder() {
+        this.checkboxElementPlaceholder.dataset.completed = this.checkboxElement.checked;
+    }
+
     #toggleConfirmButton() {
         this.confirmButton.classList.toggle("hide")
     }
@@ -123,6 +134,7 @@ export const TodoItem = class {
 
     #handleClick(e) {
         if (e.target.classList.contains("todo-item__checkbox")) {
+            this.#toggleCheckboxPlaceholder();
             this.todoApp.completeItem(this.id, this.checkboxElement.checked);
         } else if (e.target.classList.contains("todo-item__edit-confirm")) {
             this.todoApp.editItem(this.id, this.titleElement.value, this.descriptionElement.value, this.dueDateElement.value);
