@@ -13,14 +13,13 @@ export const TodoApp = class {
         this.todoList = new TodoList(this);
         this.todoListCompleted = new TodoListCompleted(this);
         this.sorter = new Sorter(this)
+        this.sortChoice = this.sorter.getSortingChoice();
         this.initializeTodoList();
         this.notification = new Notification();
     }
 
     initializeTodoList() {
-        const sortChoice = this.sorter.getSortingChoice();
-        console.log(sortChoice)
-        this.sorter.setSort(sortChoice);
+        this.sorter.setSort(this.sortChoice);
         this.renderList(this.sorter.sortedItems);
     }
 
@@ -54,6 +53,8 @@ export const TodoApp = class {
         item.setElementSelector(this.todoList.getItemSelector(id));
         this.notification.show(`Task "${title}" has been added`);
         this.items.push(item);
+        this.sorter.setSortedItems(this.sortChoice);
+        this.renderList(this.sorter.sortedItems);
     }
 
     deleteItem(id) {
