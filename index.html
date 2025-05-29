@@ -12,6 +12,13 @@
 <body>
     <main id="todo-app">
         <h1>Your To Do</h1>
+        <select name="todo-sort" id="todo-sort">
+            <option value="manual">Manual</option>
+            <option value="a-z">A - Z</option>
+            <option value="z-a">Z - A</option>
+            <option value="date-asc">Date Ascending</option>
+            <option value="date-desc">Date Descending</option>
+        </select>
         <form action="" id="todo-form">
             <button type="button" id="todo-form__open" data-active="false">+ Add Task</button>
             <input type="text" name="todo-form__title" id="todo-form__title" placeholder="Title...">

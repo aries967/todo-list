@@ -18,4 +18,12 @@ export const TodoList = class {
     getItemSelector(id) {
         return this.element.querySelector(`[data-id="${id}"]`);
     }
+
+    clear() {
+        Array.from(this.element.children).forEach(el => {
+            if (el.classList.contains("todo-item")) {
+                el.remove()
+            }
+        })
+    }
 }

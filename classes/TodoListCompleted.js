@@ -25,4 +25,12 @@ export const TodoListCompleted = class {
         this.element.dataset.hide = this.element.dataset.hide === "false" ? "true" : "false";
         this.hideBtnElement.textContent = this.element.dataset.hide === "false" ? "HIDE" : "SHOW";
     }
+
+    clear() {
+        Array.from(this.element.children).forEach(el => {
+            if (el.classList.contains("todo-item")) {
+                el.remove()
+            }
+        })
+    }
 }

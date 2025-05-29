@@ -3,6 +3,7 @@ import { TodoList } from "./TodoList.js";
 import { TodoItem } from "./TodoItem.js";
 import { Notification } from "./Notification.js";
 import { TodoListCompleted } from "./TodoListCompleted.js";
+import { Sorter } from "./Sorter.js";
 
 export const TodoApp = class {
     constructor() {
@@ -11,12 +12,19 @@ export const TodoApp = class {
         this.todoForm = new TodoForm(this);
         this.todoList = new TodoList(this);
         this.todoListCompleted = new TodoListCompleted(this);
+        this.sorter = new Sorter(this)
         this.initializeTodoList();
         this.notification = new Notification();
     }
 
     initializeTodoList() {
-        this.items.forEach(item => {
+        this.renderList(this.items)
+    }
+
+    renderList(items) {
+        this.todoList.clear();
+        this.todoListCompleted.clear();
+        items.forEach(item => {
             if(item.completed) {
                 this.todoListCompleted.appendHTML(item.html);
                 item.setElementSelector(this.todoListCompleted.element.lastElementChild);
