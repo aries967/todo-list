@@ -10,6 +10,7 @@ export const Sorter = class {
         this.setSortedItems(e.target.value);   
         this.storeSortingChoice()
         this.todoApp.renderList(this.sortedItems);
+        this.todoApp.sortChoice = e.target.value;
     }
 
     setSort(value) {

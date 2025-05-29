@@ -22,6 +22,7 @@ export const TodoApp = class {
     }
 
     renderList(items) {
+        console.log(items)
         this.todoList.clear();
         items.forEach(item => {
             this.todoList.appendHTML(item.html);
