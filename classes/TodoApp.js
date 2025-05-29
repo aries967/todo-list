@@ -18,7 +18,10 @@ export const TodoApp = class {
     }
 
     initializeTodoList() {
-        this.renderList(this.items)
+        const sortChoice = this.sorter.getSortingChoice();
+        console.log(sortChoice)
+        this.sorter.setSort(sortChoice);
+        this.renderList(this.sorter.sortedItems);
     }
 
     renderList(items) {
