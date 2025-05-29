@@ -14,8 +14,7 @@ ul {
 
 h1 {
     font-weight: 400;
-    padding-bottom: 20px;
-    margin-bottom: 20px;
+    padding-bottom: 15px;
     border-bottom: 1px solid #ccc;
 }
 
@@ -48,7 +47,16 @@ body {
     border-radius: 25px;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 25px;
+}
+
+#todo-buttons {
+    display: flex;
+    gap: 5px;
+}
+
+#todo-sort {
+    border-radius: 5px;
 }
 
 #todo-form {
