@@ -93,7 +93,7 @@ textarea#todo-form__description {
     display: flex;
     align-items: start;
     gap: 10px;
-    padding: 8px 12px;
+    padding: 12px 16px;
     border: 1px solid #ccc;
     border-radius: 10px;
     box-shadow: 2px 2px 2px #eee;
@@ -120,7 +120,13 @@ textarea#todo-form__description {
     display: none;
 }
 
-.todo-item__checkbox:checked + .todo-item__data-container > * {
+.todo-item__data-container {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+label:has(.todo-item__checkbox:checked) + .todo-item__data-container > * {
     text-decoration: line-through;
 }
 
@@ -148,6 +154,15 @@ textarea.todo-item__description {
     padding: 4px 8px;
     width: 100%;
     resize: none;
+}
+
+.todo-item__due-date {
+    font-size: 0.7rem;
+    color: #444;
+}
+
+.todo-item__due-date i {
+    margin-right: 3px;
 }
 
 .todo-item:first-child .todo-item__up {

@@ -23,7 +23,7 @@ export const TodoItem = class {
             <div class="todo-item__data-container">
                 <input type="text" value="${this.title}" class="todo-item__title" disabled>
                 <div class="todo-item__description">${this.description}</div>
-                <div class="todo-item__due-date" data-value="${this.dueDate}">${relativeDate(new Date(Date.parse(this.dueDate)))}</div>
+                <div class="todo-item__due-date" data-value="${this.dueDate}"><i class="fa-regular fa-calendar"></i> ${relativeDate(new Date(Date.parse(this.dueDate)))}</div>
                 <button class="todo-item__edit-confirm hide">CONFIRM</button>
             </div>
             <button class="todo-item__up">^</button>
@@ -95,7 +95,7 @@ export const TodoItem = class {
     #switchDueDateElement() {
         if (this.dueDateElement.tagName === "DIV") {
             const value = this.dueDateElement.dataset.value;
-            this.dueDateElement.textContent = "";
+            this.dueDateElement.innerHTML = "";
             this.dueDateElement.outerHTML = this.dueDateElement.outerHTML.replace("div", "input").replace("</input>", "");
             this.dueDateElement = this.element.querySelector(".todo-item__due-date");
             this.dueDateElement.value = value;
@@ -105,7 +105,7 @@ export const TodoItem = class {
             const value = this.dueDateElement.value;
             this.dueDateElement.outerHTML = this.dueDateElement.outerHTML.concat("</input>").replace("input", "div");
             this.dueDateElement = this.element.querySelector(".todo-item__due-date");
-            this.dueDateElement.textContent = relativeDate(new Date(Date.parse(value)));
+            this.dueDateElement.innerHTML = `<i class="fa-regular fa-calendar"></i> `+ relativeDate(new Date(Date.parse(value)));
             this.dueDateElement.dataset.value = value;
         }
     }
