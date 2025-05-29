@@ -2,7 +2,6 @@ import { TodoForm } from "./TodoForm.js";
 import { TodoList } from "./TodoList.js";
 import { TodoItem } from "./TodoItem.js";
 import { Notification } from "./Notification.js";
-import { TodoListCompleted } from "./TodoListCompleted.js";
 import { Sorter } from "./Sorter.js";
 
 export const TodoApp = class {
@@ -11,7 +10,6 @@ export const TodoApp = class {
         this.items = this.getItemsFromLocal();
         this.todoForm = new TodoForm(this);
         this.todoList = new TodoList(this);
-        this.todoListCompleted = new TodoListCompleted(this);
         this.sorter = new Sorter(this)
         this.sortChoice = this.sorter.getSortingChoice();
         this.initializeTodoList();
@@ -25,16 +23,10 @@ export const TodoApp = class {
 
     renderList(items) {
         this.todoList.clear();
-        this.todoListCompleted.clear();
         items.forEach(item => {
-            if(item.completed) {
-                this.todoListCompleted.appendHTML(item.html);
-                item.setElementSelector(this.todoListCompleted.element.lastElementChild);
-                item.checkItem();
-            } else {
-                this.todoList.appendHTML(item.html);
-                item.setElementSelector(this.todoList.element.lastElementChild);
-            }
+            this.todoList.appendHTML(item.html);
+            item.setElementSelector(this.todoList.element.lastElementChild);
+            if (item.completed) item.checkItem()
         })
     }
 
@@ -44,6 +36,11 @@ export const TodoApp = class {
 
     findIndexItemById(id) {
         return this.items.findIndex(item => item.id === id);
+    }
+
+    findFirstCompletedItemIndex(id) {
+        const index = this.items.findIndex(item => item.completed === true)
+        return index === -1 ? this.items.length : index;
     }
 
     addItem(title, dueDate) {
@@ -67,12 +64,14 @@ export const TodoApp = class {
 
     completeItem(id, completed) {
         const item = this.findItemById(id);
+        const itemIndex = this.findIndexItemById(id);
+        const destinationIndex = completed ? this.findFirstCompletedItemIndex() : 0;
         item.completed = completed;
-        if (completed) {
-            item.moveToTodoListCompleted();
-        } else {
-            item.moveToTodoList();
-        }
+        this.items.splice(destinationIndex, 0, item);
+        if (completed) this.items.splice(itemIndex,1);
+        if (!completed) this.items.splice(itemIndex+1,1)
+        this.sorter.setSortedItems(this.sortChoice);
+        this.renderList(this.sorter.sortedItems);
     }
 
     editItem(id, title, dueDate) {
