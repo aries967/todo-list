@@ -59,36 +59,6 @@ body {
     border-radius: 5px;
 }
 
-#todo-form {
-    display: flex;
-    flex-direction: column;
-    gap: 7px;
-}
-
-#todo-form[data-active="false"] {
-    display: none;
-}
-
-#todo-form__title, #todo-form__description {
-    padding: 4px 8px;
-    outline: none;
-    border-radius: 5px;
-    border: 1px solid #666;
-}
-
-textarea#todo-form__description {
-    resize: none;
-    min-height: 100px;
-}
-
-#todo-form__due-date {
-    max-width: 40%;
-    margin: 5px 0;
-    padding: 5px;
-    border-radius: 5px;
-    border: 1px solid #666;
-}
-
 .todo-item{
     display: flex;
     align-items: start;
@@ -97,6 +67,7 @@ textarea#todo-form__description {
     border: 1px solid #ccc;
     border-radius: 10px;
     box-shadow: 2px 2px 2px #eee;
+    margin-bottom: 13px;
 }
 
 .todo-item__checkbox-placeholder {
