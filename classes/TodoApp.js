@@ -2,6 +2,7 @@ import { TodoList } from "./TodoList.js";
 import { TodoItem } from "./TodoItem.js";
 import { Notification } from "./Notification.js";
 import { Sorter } from "./Sorter.js";
+import { dateInYYYYMMDD } from "../functions.js";
 
 export const TodoApp = class {
     constructor() {
@@ -46,7 +47,7 @@ export const TodoApp = class {
 
     addItem() {
         const id = this.items.length !== 0 ? Math.max(...this.items.map(i => i.id)) + 1 : 0;
-        const item = new TodoItem(id, "", "", false, this);
+        const item = new TodoItem(id, "", dateInYYYYMMDD(new Date()), false, this);
         this.todoList.appendHTML(item.html);
         item.setElementSelector(this.todoList.getItemSelector(id));
         item.toggleEditMode();
