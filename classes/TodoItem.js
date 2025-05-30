@@ -62,10 +62,8 @@ export const TodoItem = class {
     }
 
     toggleEditMode() {
-        this.editButton.textContent = this.editButton.textContent === "EDIT" ? "CANCEL" : "EDIT";
         this.#switchTitleElement();
         this.#switchDueDateElement();
-        if (this.editButton.textContent === "EDIT") this.resetValues();
     }
 
     resetValues() {
@@ -90,7 +88,7 @@ export const TodoItem = class {
         if (this.titleElement.tagName === "DIV") {
             this.titleElement.outerHTML = `<input type="text" class="todo-item__title" value="${this.titleElement.textContent}" placeholder="Title...">`
         } else {
-            this.titleElement.outerHTML = `<span class="todo-item__title">${this.titleElement.value}</span>`;
+            this.titleElement.outerHTML = `<div class="todo-item__title">${this.titleElement.value}</div>`;
         }
 
         this.titleElement = this.element.querySelector(".todo-item__title");
