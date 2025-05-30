@@ -162,12 +162,51 @@ textarea.todo-item__description {
     margin-right: 3px;
 }
 
+.todo-item__actions-container {
+    margin-left: auto;
+    position: relative;
+}
+
+.todo-item__actions {
+    position: absolute;
+    right: 10px;
+    width: max-content;
+    border-radius: 5px;
+    overflow: hidden;
+    background-color: white;
+    border: 1px solid #ccc;
+    box-shadow: 2px 2px 2px #eee;
+}
+
+.todo-item__actions-toggle + .todo-item__actions {
+    display: none;
+}
+
+.todo-item__actions-toggle--active + .todo-item__actions {
+    display: block;
+}
+
+.todo-item__actions > li {
+    padding: 8px 10px;
+    border-bottom: 1px solid #ccc;
+    font-size: 0.9em;
+    cursor: pointer;
+}
+
+.todo-item__actions >li:hover {
+    background-color: #eee;
+}
+
+.todo-item__actions > li > i {
+    margin-right: 5px;
+}
+
 .todo-item:first-child .todo-item__up {
-    opacity: 0;
+    display: none;
 }
 
 .todo-item:last-child .todo-item__down {
-    opacity: 0;
+    display: none;
 }
 
 .todo-item__up {
@@ -179,8 +218,7 @@ textarea.todo-item__description {
 }
 
 .todo-item__delete {
-    background-color: rgb(183, 0, 0);
-    color: white;
+    color: rgb(181, 0, 0);
 }
 
 #todo-list-completed[data-hide="true"] > .todo-item{

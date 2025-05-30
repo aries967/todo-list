@@ -49,9 +49,9 @@ export const TodoApp = class {
         const id = this.items.length !== 0 ? Math.max(...this.items.map(i => i.id)) + 1 : 0;
         const item = new TodoItem(id, "", dateInYYYYMMDD(new Date()), false, this);
         this.todoList.appendHTML(item.html);
+        this.items.push(item);
         item.setElementSelector(this.todoList.getItemSelector(id));
         item.toggleEditMode();
-        this.items.push(item);
     }
 
     deleteItem(id) {

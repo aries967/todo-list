@@ -23,10 +23,15 @@ export const TodoItem = class {
                 <div class="todo-item__title">${this.title}</div>
                 <div class="todo-item__due-date" data-value=${this.dueDate}><i class="fa-regular fa-calendar"></i> ${relativeDate(new Date(Date.parse(this.dueDate)))}</div>
             </div>
-            <button class="todo-item__up">^</button>
-            <button class="todo-item__down">v</button>
-            <button class="todo-item__edit">EDIT</button>
-            <button class="todo-item__delete">x</button>
+            <div class="todo-item__actions-container">
+                <button class="todo-item__actions-toggle"><i class="fa-solid fa-ellipsis-vertical"></i></button>
+                <ul class="todo-item__actions">
+                    <li class="todo-item__up"><i class="fa-solid fa-arrow-up"></i> Move Item Up</li>
+                    <li class="todo-item__down"><i class="fa-solid fa-arrow-down"></i> Move Item Down</li>
+                    <li class="todo-item__edit"><i class="fa-solid fa-pencil"></i> Edit Item</li>
+                    <li class="todo-item__delete"><i class="fa-solid fa-trash"></i> Delete Item</li>
+                </ul>
+            </div>
         </li>
     `;
     }
@@ -38,6 +43,7 @@ export const TodoItem = class {
         this.titleElement = this.element.querySelector(".todo-item__title");
         this.dueDateElement = this.element.querySelector(".todo-item__due-date")
         this.editButton = this.element.querySelector(".todo-item__edit");
+        this.actionsToggleButton = this.element.querySelector(".todo-item__actions-toggle")
         this.#delegateClickEvents();
     }
 
@@ -94,7 +100,7 @@ export const TodoItem = class {
 
     #bindTitleElementEnterEvent() {
         this.titleElement.addEventListener("keydown", (e) => {
-            if(e.code === "Enter" && e.currentTarget.value !== "") {
+            if (e.code === "Enter" && e.currentTarget.value !== "") {
                 this.todoApp.editItem(this.id, this.titleElement.value, this.dueDateElement.value)
                 this.toggleEditMode()
             }
@@ -113,7 +119,7 @@ export const TodoItem = class {
             const value = this.dueDateElement.value;
             this.dueDateElement.outerHTML = this.dueDateElement.outerHTML.concat("</input>").replace("input", "div");
             this.dueDateElement = this.element.querySelector(".todo-item__due-date");
-            this.dueDateElement.innerHTML = `<i class="fa-regular fa-calendar"></i> `+ relativeDate(new Date(Date.parse(value)));
+            this.dueDateElement.innerHTML = `<i class="fa-regular fa-calendar"></i> ` + relativeDate(new Date(Date.parse(value)));
             console.log(this.dueDateElement.innerHTML)
             this.dueDateElement.dataset.value = value;
         }
@@ -127,7 +133,12 @@ export const TodoItem = class {
         this.element.addEventListener("click", this.#handleClick.bind(this), false)
     }
 
+    #toggleActions() {
+        this.actionsToggleButton.classList.toggle("todo-item__actions-toggle--active")
+    }
+
     #handleClick(e) {
+        console.log(e.target)
         if (e.target.classList.contains("todo-item__checkbox")) {
             this.#toggleCheckboxPlaceholder();
             this.todoApp.completeItem(this.id, this.checkboxElement.checked);
@@ -136,6 +147,8 @@ export const TodoItem = class {
             this.toggleEditMode();
             this.todoApp.sorter.setSortedItems(this.todoApp.sortChoice);
             this.todoApp.renderList(this.todoApp.sorter.sortedItems);
+        } else if (e.target.classList.contains("todo-item__actions-toggle")) {
+            this.#toggleActions();
         } else if (e.target.classList.contains("todo-item__up")) {
             this.todoApp.moveItemUp(this.id);
         } else if (e.target.classList.contains("todo-item__down")) {

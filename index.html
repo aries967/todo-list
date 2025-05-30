@@ -33,12 +33,17 @@
                 </label>
                 <div class="todo-item__data-container">
                     <div class="todo-item__title">Item Name</div>
-                    <div class="todo-item__due-date" data-value="2025-05-30">Today</div>
+                    <div class="todo-item__due-date" data-value="2025-05-30"><i class="fa-regular fa-calendar"></i>Today</div>
                 </div>
-                <button class="todo-item__up">^</button>
-                <button class="todo-item__down">v</button>
-                <button class="todo-item__edit">EDIT</button>
-                <button class="todo-item__delete">x</button>
+                <div class="todo-item__actions-container">
+                    <button class="todo-item__actions-toggle"><i class="fa-solid fa-ellipsis-vertical"></i></button>
+                    <ul class="todo-item__actions">
+                        <li class="todo-item__up"><i class="fa-solid fa-arrow-up"></i> Move Item Up</li>
+                        <li class="todo-item__down"><i class="fa-solid fa-arrow-down"></i> Move Item Down</li>
+                        <li class="todo-item__edit"><i class="fa-solid fa-pencil"></i> Edit Item</li>
+                        <li class="todo-item__delete"><i class="fa-solid fa-trash"></i> Delete Item</li>
+                    </ul>
+                </div>
             </li> -->
         </ul>
         <div id="notification">
