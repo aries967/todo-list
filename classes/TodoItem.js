@@ -21,7 +21,7 @@ export const TodoItem = class {
             </label>
             <div class="todo-item__data-container">
                 <div class="todo-item__title">${this.title}</div>
-                <div class="todo-item__due-date" data-value=${this.dueDate}>${relativeDate(new Date(Date.parse(this.dueDate)))}</div>
+                <div class="todo-item__due-date" data-value=${this.dueDate}><i class="fa-regular fa-calendar"></i> ${relativeDate(new Date(Date.parse(this.dueDate)))}</div>
             </div>
             <button class="todo-item__up">^</button>
             <button class="todo-item__down">v</button>
@@ -64,7 +64,7 @@ export const TodoItem = class {
 
     resetValues() {
         this.titleElement.value = this.todoApp.findItemById(this.id).title;
-        this.dueDateElement.textContent = relativeDate(new Date(Date.parse(this.todoApp.findItemById(this.id).dueDate)));
+        this.dueDateElement.innerHTML = `<i class="fa-regular fa-calendar"></i> ` + relativeDate(new Date(Date.parse(this.todoApp.findItemById(this.id).dueDate)));
     }
 
     checkItem() {
@@ -109,12 +109,12 @@ export const TodoItem = class {
             this.dueDateElement = this.element.querySelector(".todo-item__due-date");
             this.dueDateElement.value = value;
             this.dueDateElement.type = "date";
-            console.log(this.dueDateElement)
         } else {
             const value = this.dueDateElement.value;
             this.dueDateElement.outerHTML = this.dueDateElement.outerHTML.concat("</input>").replace("input", "div");
             this.dueDateElement = this.element.querySelector(".todo-item__due-date");
             this.dueDateElement.innerHTML = `<i class="fa-regular fa-calendar"></i> `+ relativeDate(new Date(Date.parse(value)));
+            console.log(this.dueDateElement.innerHTML)
             this.dueDateElement.dataset.value = value;
         }
     }
