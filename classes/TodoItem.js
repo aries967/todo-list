@@ -88,7 +88,17 @@ export const TodoItem = class {
         }
 
         this.titleElement = this.element.querySelector(".todo-item__title");
+        if (this.titleElement.tagName === "INPUT") this.#bindTitleElementEnterEvent()
         this.titleElement.focus();
+    }
+
+    #bindTitleElementEnterEvent() {
+        this.titleElement.addEventListener("keydown", (e) => {
+            if(e.code === "Enter" && e.currentTarget.value !== "") {
+                this.todoApp.editItem(this.id, this.titleElement.value, this.dueDateElement.value)
+                this.toggleEditMode()
+            }
+        })
     }
 
     #switchDueDateElement() {
