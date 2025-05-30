@@ -134,6 +134,9 @@ export const TodoItem = class {
     }
 
     #toggleActions() {
+        this.todoApp.items.forEach(item => {
+            if (item.id !== this.id) item.actionsToggleButton.classList.remove("todo-item__actions-toggle--active")
+        });
         this.actionsToggleButton.classList.toggle("todo-item__actions-toggle--active")
     }
 
@@ -147,16 +150,20 @@ export const TodoItem = class {
             this.toggleEditMode();
             this.todoApp.sorter.setSortedItems(this.todoApp.sortChoice);
             this.todoApp.renderList(this.todoApp.sorter.sortedItems);
-        } else if (e.target.classList.contains("todo-item__actions-toggle")) {
+        } else if (e.target.classList.contains("todo-item__actions-toggle") || e.target.parentElement.classList.contains("todo-item__actions-toggle")) {
             this.#toggleActions();
         } else if (e.target.classList.contains("todo-item__up")) {
             this.todoApp.moveItemUp(this.id);
+            this.#toggleActions();
         } else if (e.target.classList.contains("todo-item__down")) {
             this.todoApp.moveItemDown(this.id);
+            this.#toggleActions();
         } else if (e.target.classList.contains("todo-item__edit")) {
             this.toggleEditMode();
+            this.#toggleActions();
         } else if (e.target.classList.contains("todo-item__delete")) {
             this.todoApp.deleteItem(this.id);
+            this.#toggleActions();
         } else if ((e.target.classList.contains("todo-item__data-container") || e.target.classList.contains("todo-item__title") || e.target.classList.contains("todo-item__due-date")) && e.detail === 2 && this.descriptionElement.tagName === "DIV") {
             this.toggleEditMode();
         }
