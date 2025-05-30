@@ -1,4 +1,3 @@
-import { TodoForm } from "./TodoForm.js";
 import { TodoList } from "./TodoList.js";
 import { TodoItem } from "./TodoItem.js";
 import { Notification } from "./Notification.js";
@@ -8,8 +7,9 @@ export const TodoApp = class {
     constructor() {
         this.element = document.getElementById("todo-app");
         this.items = this.getItemsFromLocal();
-        this.todoForm = new TodoForm(this);
         this.todoList = new TodoList(this);
+        this.newBtnElement = document.getElementById("todo-new");
+        this.newBtnElement.addEventListener("click", this.addItem.bind(this))
         this.sorter = new Sorter(this)
         this.sortChoice = this.sorter.getSortingChoice();
         this.initializeTodoList();
@@ -44,15 +44,12 @@ export const TodoApp = class {
         return index === -1 ? this.items.length : index;
     }
 
-    addItem(title, dueDate) {
+    addItem() {
         const id = this.items.length !== 0 ? Math.max(...this.items.map(i => i.id)) + 1 : 0;
-        const item = new TodoItem(id, title, dueDate, false, this);
+        const item = new TodoItem(id, "", "", false, this);
         this.todoList.appendHTML(item.html);
         item.setElementSelector(this.todoList.getItemSelector(id));
-        this.notification.show(`Task "${title}" has been added`);
-        this.items.push(item);
-        this.sorter.setSortedItems(this.sortChoice);
-        this.renderList(this.sorter.sortedItems);
+        item.toggleEditMode();
     }
 
     deleteItem(id) {

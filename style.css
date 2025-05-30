@@ -130,16 +130,13 @@ label:has(.todo-item__checkbox:checked) + .todo-item__data-container > * {
     text-decoration: line-through;
 }
 
-.todo-item__title:disabled{
-    background: transparent;
-    color: black;
-    border: none;
-}
 
-.todo-item__title:not(:disabled) {
-    padding: 4px 8px;
-    border-radius: 10px;
-    border: 1px solid black;
+input.todo-item__title {
+    padding: 4px 0;
+    margin-bottom: 5px;
+    outline: none;
+    border: none;
+    border-bottom: 1px solid #ccc;
 }
 
 .todo-item__description {

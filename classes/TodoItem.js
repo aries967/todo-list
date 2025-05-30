@@ -12,7 +12,7 @@ export const TodoItem = class {
 
     setItemHTML() {
         this.html = `
-        <li class="todo-item" data-id=${this.id}>
+        <li class="todo-item" data-id="${this.id}">
             <label>
                 <span class="todo-item__checkbox-placeholder" data-completed="false">
                     <i class="fa-solid fa-check"></i>
@@ -20,9 +20,8 @@ export const TodoItem = class {
                 <input type="checkbox" class="todo-item__checkbox">
             </label>
             <div class="todo-item__data-container">
-                <input type="text" value="${this.title}" class="todo-item__title" disabled>
-                <div class="todo-item__due-date" data-value="${this.dueDate}"><i class="fa-regular fa-calendar"></i> ${relativeDate(new Date(Date.parse(this.dueDate)))}</div>
-                <button class="todo-item__edit-confirm hide">CONFIRM</button>
+                <div class="todo-item__title">${this.title}</div>
+                <div class="todo-item__due-date" data-value=${this.dueDate}>${relativeDate(new Date(Date.parse(this.dueDate)))}</div>
             </div>
             <button class="todo-item__up">^</button>
             <button class="todo-item__down">v</button>
@@ -38,7 +37,6 @@ export const TodoItem = class {
         this.checkboxElementPlaceholder = this.element.querySelector(".todo-item__checkbox-placeholder");
         this.titleElement = this.element.querySelector(".todo-item__title");
         this.dueDateElement = this.element.querySelector(".todo-item__due-date")
-        this.confirmButton = this.element.querySelector(".todo-item__edit-confirm");
         this.editButton = this.element.querySelector(".todo-item__edit");
         this.#delegateClickEvents();
     }
@@ -58,10 +56,9 @@ export const TodoItem = class {
     }
 
     toggleEditMode() {
-        this.titleElement.disabled = !this.titleElement.disabled;
         this.editButton.textContent = this.editButton.textContent === "EDIT" ? "CANCEL" : "EDIT";
+        this.#switchTitleElement();
         this.#switchDueDateElement();
-        this.#toggleConfirmButton();
         if (this.editButton.textContent === "EDIT") this.resetValues();
     }
 
@@ -81,6 +78,17 @@ export const TodoItem = class {
 
     swapWithNextSibling() {
         this.element.nextSibling.after(this.element);
+    }
+
+    #switchTitleElement() {
+        if (this.titleElement.tagName === "DIV") {
+            this.titleElement.outerHTML = `<input type="text" class="todo-item__title" value="${this.titleElement.textContent}" placeholder="Title...">`
+        } else {
+            this.titleElement.outerHTML = `<span class="todo-item__title">${this.titleElement.value}</span>`;
+        }
+
+        this.titleElement = this.element.querySelector(".todo-item__title");
+        this.titleElement.focus();
     }
 
     #switchDueDateElement() {
@@ -103,10 +111,6 @@ export const TodoItem = class {
 
     #toggleCheckboxPlaceholder() {
         this.checkboxElementPlaceholder.dataset.completed = this.checkboxElement.checked;
-    }
-
-    #toggleConfirmButton() {
-        this.confirmButton.classList.toggle("hide")
     }
 
     #delegateClickEvents() {
