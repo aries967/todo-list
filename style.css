@@ -138,6 +138,18 @@ textarea.todo-item__description {
     position: relative;
 }
 
+.todo-item__confirm, .todo-item__cancel {
+    display: none;
+}
+
+.todo-item__confirm--active, .todo-item__cancel--active {
+    display: inline-block;
+}
+
+.todo-item__cancel--active + .todo-item__actions-toggle {
+    display: none;
+}
+
 .todo-item__actions {
     position: absolute;
     right: 10px;

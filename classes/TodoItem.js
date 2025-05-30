@@ -24,6 +24,8 @@ export const TodoItem = class {
                 <div class="todo-item__due-date" data-value=${this.dueDate}><i class="fa-regular fa-calendar"></i> ${relativeDate(new Date(Date.parse(this.dueDate)))}</div>
             </div>
             <div class="todo-item__actions-container">
+                <button class="todo-item__confirm"><i class="fa-solid fa-check"></i></button>
+                    <button class="todo-item__cancel"><i class="fa-solid fa-x"></i></button>
                 <button class="todo-item__actions-toggle"><i class="fa-solid fa-ellipsis-vertical"></i></button>
                 <ul class="todo-item__actions">
                     <li class="todo-item__up"><i class="fa-solid fa-arrow-up"></i> Move Item Up</li>
@@ -43,6 +45,8 @@ export const TodoItem = class {
         this.titleElement = this.element.querySelector(".todo-item__title");
         this.dueDateElement = this.element.querySelector(".todo-item__due-date")
         this.editButton = this.element.querySelector(".todo-item__edit");
+        this.confirmButton = this.element.querySelector(".todo-item__confirm");
+        this.cancelButton = this.element.querySelector(".todo-item__cancel");
         this.actionsToggleButton = this.element.querySelector(".todo-item__actions-toggle")
         this.#delegateClickEvents();
     }
@@ -62,6 +66,7 @@ export const TodoItem = class {
     }
 
     toggleEditMode() {
+        this.#toggleConfirmCancel();
         this.#switchTitleElement();
         this.#switchDueDateElement();
     }
@@ -131,6 +136,11 @@ export const TodoItem = class {
         this.element.addEventListener("click", this.#handleClick.bind(this), false)
     }
 
+    #toggleConfirmCancel() {
+        this.confirmButton.classList.toggle("todo-item__confirm--active");
+        this.cancelButton.classList.toggle("todo-item__cancel--active");
+    }
+
     #toggleActions() {
         this.todoApp.items.forEach(item => {
             if (item.id !== this.id) item.actionsToggleButton.classList.remove("todo-item__actions-toggle--active")
@@ -143,8 +153,13 @@ export const TodoItem = class {
         if (e.target.classList.contains("todo-item__checkbox")) {
             this.#toggleCheckboxPlaceholder();
             this.todoApp.completeItem(this.id, this.checkboxElement.checked);
-        } else if (e.target.classList.contains("todo-item__edit-confirm")) {
+        } else if (e.target.classList.contains("todo-item__confirm") || e.target.parentElement.classList.contains("todo-item__confirm")) {
             this.todoApp.editItem(this.id, this.titleElement.value, this.dueDateElement.value);
+            this.toggleEditMode();
+            this.todoApp.sorter.setSortedItems(this.todoApp.sortChoice);
+            this.todoApp.renderList(this.todoApp.sorter.sortedItems);
+        } else if (e.target.classList.contains("todo-item__cancel") || e.target.parentElement.classList.contains("todo-item__cancel")) {
+            this.resetValues();
             this.toggleEditMode();
             this.todoApp.sorter.setSortedItems(this.todoApp.sortChoice);
             this.todoApp.renderList(this.todoApp.sorter.sortedItems);
