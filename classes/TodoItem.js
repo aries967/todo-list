@@ -43,7 +43,8 @@ export const TodoItem = class {
         this.checkboxElement = this.element.querySelector(".todo-item__checkbox")
         this.checkboxElementPlaceholder = this.element.querySelector(".todo-item__checkbox-placeholder");
         this.titleElement = this.element.querySelector(".todo-item__title");
-        this.dueDateElement = this.element.querySelector(".todo-item__due-date")
+        this.dueDateElement = this.element.querySelector(".todo-item__due-date");
+        this.deleteButton = this.element.querySelector(".todo-item__delete");
         this.editButton = this.element.querySelector(".todo-item__edit");
         this.confirmButton = this.element.querySelector(".todo-item__confirm");
         this.cancelButton = this.element.querySelector(".todo-item__cancel");
@@ -72,8 +73,9 @@ export const TodoItem = class {
     }
 
     resetValues() {
-        this.titleElement.value = this.todoApp.findItemById(this.id).title;
-        this.dueDateElement.innerHTML = `<i class="fa-regular fa-calendar"></i> ` + relativeDate(new Date(Date.parse(this.todoApp.findItemById(this.id).dueDate)));
+        const title = this.todoApp.findItemById(this.id).title;
+        this.titleElement.value =
+            this.dueDateElement.innerHTML = `<i class="fa-regular fa-calendar"></i> ` + relativeDate(new Date(Date.parse(this.todoApp.findItemById(this.id).dueDate)));
     }
 
     checkItem() {
@@ -149,7 +151,6 @@ export const TodoItem = class {
     }
 
     #handleClick(e) {
-        console.log(e.target)
         if (e.target.classList.contains("todo-item__checkbox")) {
             this.#toggleCheckboxPlaceholder();
             this.todoApp.completeItem(this.id, this.checkboxElement.checked);
@@ -159,8 +160,12 @@ export const TodoItem = class {
             this.todoApp.sorter.setSortedItems(this.todoApp.sortChoice);
             this.todoApp.renderList(this.todoApp.sorter.sortedItems);
         } else if (e.target.classList.contains("todo-item__cancel") || e.target.parentElement.classList.contains("todo-item__cancel")) {
-            this.resetValues();
-            this.toggleEditMode();
+            if (this.element.classList.contains("todo-item--new")) {
+                this.todoApp.items.pop()
+            } else {
+                this.resetValues();
+                this.toggleEditMode();
+            }
             this.todoApp.sorter.setSortedItems(this.todoApp.sortChoice);
             this.todoApp.renderList(this.todoApp.sorter.sortedItems);
         } else if (e.target.classList.contains("todo-item__actions-toggle") || e.target.parentElement.classList.contains("todo-item__actions-toggle")) {

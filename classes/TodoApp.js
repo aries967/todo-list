@@ -51,6 +51,7 @@ export const TodoApp = class {
         this.todoList.appendHTML(item.html);
         this.items.push(item);
         item.setElementSelector(this.todoList.getItemSelector(id));
+        item.element.classList.add("todo-item--new");
         item.toggleEditMode();
     }
 
