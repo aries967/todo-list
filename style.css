@@ -8,6 +8,10 @@
     box-sizing: border-box;
 }
 
+body {
+    min-height: 100vh;
+}
+
 ul {
     list-style-type: none;
 }
@@ -229,4 +233,9 @@ textarea.todo-item__description {
     bottom: 40px;
     right: 40px;
     display: none;
+}
+
+#dnd-container .todo-item {
+    position: absolute;
+    width: 400px;
 }

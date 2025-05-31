@@ -3,6 +3,7 @@ import { TodoItem } from "./TodoItem.js";
 import { Notification } from "./Notification.js";
 import { Sorter } from "./Sorter.js";
 import { dateInYYYYMMDD } from "../functions.js";
+import { DragAndDrop } from "./DragAndDrop.js";
 
 export const TodoApp = class {
     constructor() {
@@ -13,7 +14,9 @@ export const TodoApp = class {
         this.newBtnElement.addEventListener("click", this.addItem.bind(this))
         this.sorter = new Sorter(this)
         this.sortChoice = this.sorter.getSortingChoice();
+        this.dnd = new DragAndDrop(this);
         this.initializeTodoList();
+        this.dnd.bindWindowListeners();
         this.notification = new Notification();
     }
 
@@ -23,13 +26,13 @@ export const TodoApp = class {
     }
 
     renderList(items) {
-        console.log(items)
         this.todoList.clear();
         items.forEach(item => {
             this.todoList.appendHTML(item.html);
             item.setElementSelector(this.todoList.element.lastElementChild);
             if (item.completed) item.checkItem()
         })
+        this.dnd.bindItemListeners(this.items);
     }
 
     findItemById(id) {
@@ -53,6 +56,7 @@ export const TodoApp = class {
         item.setElementSelector(this.todoList.getItemSelector(id));
         item.element.classList.add("todo-item--new");
         item.toggleEditMode();
+        this.dnd.bindItemListeners(this.items);
     }
 
     deleteItem(id) {
@@ -116,5 +120,35 @@ export const TodoApp = class {
         let items = JSON.parse(localStorage.getItem("items")) || [];
         items = items.map(item => new TodoItem(item.id, item.title, item.dueDate, item.completed, this));
         return items
+    }
+
+    getItemsMiddleCoordinates() {
+        return this.items.map(item => {
+            let rect = item.element.getBoundingClientRect();
+            return rect.y + (rect.height / 2);
+        })
+    }
+
+    setBorderStyleOnItem(index) {
+        if (index === this.items.length) {
+            this.items[this.items.length-1].element.style.borderBottom = "2px solid black";
+            return;
+        }
+
+        this.items[index].element.style.borderTop = "2px solid black";
+    }
+
+    resetItemsBorderStyle() {
+        this.items.forEach(item => {
+            item.element.style.borderBottom = "";
+            item.element.style.borderTop = "";
+        })
+    }
+
+    insertItemOnIndex(index, item) {
+        this.items.splice(index, 0, item);
+        this.sorter.setSortedItems(this.sortChoice);
+        this.renderList(this.sorter.sortedItems);
+        this.dnd.removeActiveItem();
     }
 }
