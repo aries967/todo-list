@@ -61,7 +61,43 @@ body {
 }
 
 #todo-sort {
-    border-radius: 5px;
+    position: relative;
+}
+
+#todo-sort__toggle {
+    border: 1px solid black;
+}
+
+#todo-sort__toggle i {
+    margin-right: 3px;
+}
+
+#todo-sort__toggle[data-active="false"] + #todo-sort__options{
+    display: none;
+}
+
+#todo-sort__toggle[data-active="true"] + #todo-sort__options{
+    display: block;
+}
+
+#todo-sort__options {
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-shadow: 2px 2px 2px #eee;
+    position: absolute;
+    left: 20px;
+    min-width: max-content;
+}
+
+#todo-sort__options > li {
+    padding: 8px 12px;
+    font-size: 0.9em;
+    border-bottom: 1px solid #ccc;
+}
+
+#todo-sort__options > li:hover {
+    background-color: #ccc;
 }
 
 .todo-item {

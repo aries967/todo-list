@@ -17,13 +17,24 @@
         <h1>Your To Do</h1>
         <div id="todo-buttons">
             <button type="button" id="todo-new">+ New Task</button>
-            <select name="todo-sort" id="todo-sort">
+            <!-- <select name="todo-sort" id="todo-sort">
                 <option value="manual">Manual</option>
                 <option value="a-z">A - Z</option>
                 <option value="z-a">Z - A</option>
                 <option value="date-asc">Date Ascending</option>
                 <option value="date-desc">Date Descending</option>
-            </select>
+            </select> -->
+            <div id="todo-sort">
+                <button id="todo-sort__toggle" data-active="false"><i class="fa-solid fa-arrow-up-wide-short"></i> Sort</button>
+                <ul id="todo-sort__options">
+                    <li data-value="manual">Manual</li>
+                    <li data-value="a-z">A - Z</li>
+                    <li data-value="z-a">Z - A</li>
+                    <li data-value="date-asc">Date Ascending</li>
+                    <li data-value="date-desc">Date Descending</li>
+                </ul>
+
+            </div>
         </div>
         <ul id="todo-list">
             <!-- <li class="todo-item" data-id="2">

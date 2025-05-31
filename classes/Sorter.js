@@ -1,23 +1,31 @@
 export const Sorter = class {
     constructor(todoApp) {
         this.element = document.getElementById("todo-sort");
-        this.element.addEventListener("change", this.handleChange.bind(this));
+        this.toggleElement = document.getElementById("todo-sort__toggle");
+        this.toggleElement.addEventListener("click", this.handleToggle.bind(this));
+        this.optionElements = document.querySelectorAll("#todo-sort__options > li");
+        this.optionElements.forEach(element => element.addEventListener("click", this.handleSelect.bind(this)))
         this.todoApp = todoApp;
         this.sortedItems = todoApp.items;
     }
 
-    handleChange(e) {
-        this.setSortedItems(e.target.value);   
+    handleSelect(e) {
+        this.setSortedItems(e.currentTarget.dataset.value); 
+        this.todoApp.sortChoice = e.currentTarget.dataset.value;
+        this.toggleElement.innerHTML = '<i class="fa-solid fa-arrow-up-wide-short"></i> ' + e.currentTarget.textContent;  
+        this.handleToggle();
         this.storeSortingChoice()
         this.todoApp.renderList(this.sortedItems);
-        this.todoApp.sortChoice = e.target.value;
+    }
+
+    handleToggle(e) {
+        this.toggleElement.dataset.active = this.toggleElement.dataset.active === "false" ? "true" : "false";
     }
 
     setSort(value) {
-        Array.from(this.element.options).forEach(option => {
-            console.log(option, value)
-            if (option.value === value) {
-                this.element.selectedIndex = option.index
+        Array.from(this.optionElements).forEach(element => {
+            if (element.dataset.value === value) {
+                this.toggleElement.innerHTML = '<i class="fa-solid fa-arrow-up-wide-short"></i>' + element.textContent;
             }
         });
         this.setSortedItems(value);
@@ -60,7 +68,7 @@ export const Sorter = class {
     }
 
     storeSortingChoice() {
-        localStorage.setItem("sort", this.element.value);
+        localStorage.setItem("sort", this.todoApp.sortChoice);
     }
 
     getSortingChoice() {
