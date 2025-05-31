@@ -173,9 +173,17 @@ export const TodoItem = class {
         } else if (e.target.classList.contains("todo-item__actions-toggle") || e.target.parentElement.classList.contains("todo-item__actions-toggle")) {
             this.#toggleActions();
         } else if (e.target.classList.contains("todo-item__up")) {
+            if (this.todoApp.sortChoice !== "manual") {
+                this.todoApp.notification.show("You can't change item sorting on non-manual sort");
+                return
+            }
             this.todoApp.moveItemUp(this.id);
             this.#toggleActions();
         } else if (e.target.classList.contains("todo-item__down")) {
+            if (this.todoApp.sortChoice !== "manual") {
+                this.todoApp.notification.show("You can't change item sorting on non-manual sort");
+                return
+            }
             this.todoApp.moveItemDown(this.id);
             this.#toggleActions();
         } else if (e.target.classList.contains("todo-item__edit")) {

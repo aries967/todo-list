@@ -14,7 +14,6 @@ export const DragAndDrop = class {
     setYCoordinates() {
         this.coordinates = [];
         this.coordinates = this.coordinates.concat(this.todoApp.getItemsMiddleCoordinates());
-        console.log(this.coordinates);
     }
 
     bindWindowListeners() {
@@ -22,7 +21,11 @@ export const DragAndDrop = class {
             if (this.mouseDownedItem === undefined) return;
             let x = e.clientX;
             let y = e.clientY;
-            if (Math.hypot(x-this.initX, y-this.initY) < 20) return;
+            if (Math.hypot(x-this.initX, y-this.initY) < 100 && this.draggedItem === undefined) return;
+            if (this.todoApp.sortChoice !== "manual") {
+                this.todoApp.notification.show("You can't change item sorting on non-manual sort");
+                return
+            }
             clearTimeout(this.mouseDownTimeout);
             this.draggedItem = this.mouseDownedItem;
             this.todoApp.items = this.todoApp.items.filter(item => item.id !== this.draggedItem.id)
@@ -36,7 +39,7 @@ export const DragAndDrop = class {
         }) 
 
         window.addEventListener("mouseup", () => {
-            if (this.draggedItem === undefined) return;
+            if (this.draggedItem === undefined || this.mouseDownedItem === undefined) return;
             this.todoApp.insertItemOnIndex(this.index, this.draggedItem);
             this.draggedItem = undefined;
             this.mouseDownedItem = undefined;
