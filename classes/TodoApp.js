@@ -51,8 +51,8 @@ export const TodoApp = class {
     addItem() {
         const id = this.items.length !== 0 ? Math.max(...this.items.map(i => i.id)) + 1 : 0;
         const item = new TodoItem(id, "", dateInYYYYMMDD(new Date()), false, this);
-        this.todoList.appendHTML(item.html);
-        this.items.push(item);
+        this.todoList.prependHTML(item.html);
+        this.items.unshift(item);
         item.setElementSelector(this.todoList.getItemSelector(id));
         item.element.classList.add("todo-item--new");
         item.toggleEditMode();

@@ -11,6 +11,11 @@ export const TodoList = class {
        this.element.append(element);
     }
 
+    prependHTML(html) {
+        const element = htmlToElement(html);
+        this.element.prepend(element);
+    }
+
     appendItem(item) {
         this.element.append(item.element);
     }
