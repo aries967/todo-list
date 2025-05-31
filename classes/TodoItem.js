@@ -13,26 +13,28 @@ export const TodoItem = class {
     setItemHTML() {
         this.html = `
         <li class="todo-item" data-id="${this.id}">
-            <label>
-                <span class="todo-item__checkbox-placeholder" data-completed="false">
-                    <i class="fa-solid fa-check"></i>
-                </span>
-                <input type="checkbox" class="todo-item__checkbox">
-            </label>
-            <div class="todo-item__data-container">
-                <div class="todo-item__title">${this.title}</div>
-                <div class="todo-item__due-date" data-value=${this.dueDate}><i class="fa-regular fa-calendar"></i> ${relativeDate(new Date(Date.parse(this.dueDate)))}</div>
-            </div>
-            <div class="todo-item__actions-container">
-                <button class="todo-item__confirm"><i class="fa-solid fa-check"></i></button>
-                    <button class="todo-item__cancel"><i class="fa-solid fa-x"></i></button>
-                <button class="todo-item__actions-toggle"><i class="fa-solid fa-ellipsis-vertical"></i></button>
-                <ul class="todo-item__actions">
-                    <li class="todo-item__up"><i class="fa-solid fa-arrow-up"></i> Move Item Up</li>
-                    <li class="todo-item__down"><i class="fa-solid fa-arrow-down"></i> Move Item Down</li>
-                    <li class="todo-item__edit"><i class="fa-solid fa-pencil"></i> Edit Item</li>
-                    <li class="todo-item__delete"><i class="fa-solid fa-trash"></i> Delete Item</li>
-                </ul>
+            <div class="todo-item__inner-container">
+                <label>
+                    <span class="todo-item__checkbox-placeholder" data-completed="false">
+                        <i class="fa-solid fa-check"></i>
+                    </span>
+                    <input type="checkbox" class="todo-item__checkbox">
+                </label>
+                <div class="todo-item__data-container">
+                    <div class="todo-item__title">${this.title}</div>
+                    <div class="todo-item__due-date" data-value=${this.dueDate}><i class="fa-regular fa-calendar"></i> ${relativeDate(new Date(Date.parse(this.dueDate)))}</div>
+                </div>
+                <div class="todo-item__actions-container">
+                    <button class="todo-item__confirm"><i class="fa-solid fa-check"></i></button>
+                        <button class="todo-item__cancel"><i class="fa-solid fa-x"></i></button>
+                    <button class="todo-item__actions-toggle"><i class="fa-solid fa-ellipsis-vertical"></i></button>
+                    <ul class="todo-item__actions">
+                        <li class="todo-item__up"><i class="fa-solid fa-arrow-up"></i> Move Item Up</li>
+                        <li class="todo-item__down"><i class="fa-solid fa-arrow-down"></i> Move Item Down</li>
+                        <li class="todo-item__edit"><i class="fa-solid fa-pencil"></i> Edit Item</li>
+                        <li class="todo-item__delete"><i class="fa-solid fa-trash"></i> Delete Item</li>
+                    </ul>
+                </div>
             </div>
         </li>
     `;
