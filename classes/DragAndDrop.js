@@ -21,7 +21,7 @@ export const DragAndDrop = class {
             if (this.mouseDownedItem === undefined) return;
             let x = e.clientX;
             let y = e.clientY;
-            if (Math.hypot(x-this.initX, y-this.initY) < 100 && this.draggedItem === undefined) return;
+            if (Math.hypot(x-this.initX, y-this.initY) < 50 && this.draggedItem === undefined) return;
             if (this.todoApp.sortChoice !== "manual") {
                 this.todoApp.notification.show("You can't change item sorting on non-manual sort");
                 return
@@ -64,7 +64,7 @@ export const DragAndDrop = class {
                 this.initY = e.clientY;
                 this.mouseDownTimeout = setTimeout(() => {
                     this.mouseDownedItem = undefined;
-                }, 500)
+                }, 350)
             })
         })
     }
