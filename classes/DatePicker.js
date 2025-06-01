@@ -23,7 +23,7 @@ export const DatePicker = class {
         Array.from(this.datesElement.children).forEach((child, i) => {
             try {
                 if (dates[i].getMonth() !== date.getMonth()) child.classList.add("grey-text");
-                if (dates[i].getDate() === this.dateNum && dates[i].getMonth() === this.month && dates[i].getFullYear === this.year) child.classList.add("selected");
+                if (dates[i].getDate() === this.dateNum && dates[i].getMonth() === this.month && dates[i].getFullYear() === this.year) child.classList.add("selected");
                 child.textContent = dates[i].getDate();
                 child.dataset.value = dateInYYYYMMDD(dates[i]);
             } catch {
