@@ -1,6 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
 
-
 * {
     font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
     padding: 0;
@@ -39,6 +38,10 @@ button {
 
 .hide {
     display: none;
+}
+
+.grey-text {
+    color: grey;
 }
 
 #todo-new, #todo-form__submit {
@@ -174,6 +177,16 @@ textarea.todo-item__description {
 .todo-item__due-date {
     font-size: 0.7rem;
     color: #444;
+    border-radius: 999px;
+    width: fit-content;
+}
+
+.todo-item__due-date[data-edit="true"]{
+    padding: 4px 6px;
+}
+
+.todo-item__due-date[data-edit="true"]:hover {
+    background-color: #ccc;
 }
 
 .todo-item__due-date i {
@@ -251,18 +264,6 @@ textarea.todo-item__description {
     color: rgb(181, 0, 0);
 }
 
-#todo-list-completed[data-hide="true"] > .todo-item{
-    display: none;
-}
-
-#todo-list-completed :is(.todo-item__up, .todo-item__down) {
-    display: none;
-}
-
-#todo-list-completed .todo-item__edit {
-    margin-left: auto;
-}
-
 #notification {
     background-color: white;
     border: 2px solid black;
@@ -277,6 +278,51 @@ textarea.todo-item__description {
 #dnd-container .todo-item {
     position: absolute;
     width: 400px;
+}
+
+#date-picker {
+    position: absolute;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    width: 240px;
+}
+
+#date-picker__header {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid #ccc;
+    padding: 4px 8px;
+}
+
+#date-picker__month, #date-picker__year {
+    font-weight: bold;
+}
+
+#date-picker__year {
+    color: #888;
+}
+
+#date-picker__days, #date-picker__dates {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    font-size: 0.8em;
+    text-align: center;
+    font-weight: 500;
+}
+
+#date-picker__days {
+    color: #888;
+}
+
+#date-picker__days > *, #date-picker__dates > * {
+    padding: 5px;
+}
+
+#date-picker__dates > .selected {
+    background-color: black;
+    color: white;
+    border-radius: 5px;
 }
 
 @media screen and (max-width: 600px) {

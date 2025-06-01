@@ -4,6 +4,7 @@ import { Notification } from "./Notification.js";
 import { Sorter } from "./Sorter.js";
 import { dateInYYYYMMDD } from "../functions.js";
 import { DragAndDrop } from "./DragAndDrop.js";
+import { DatePicker } from "./DatePicker.js";
 
 export const TodoApp = class {
     constructor() {
@@ -18,6 +19,7 @@ export const TodoApp = class {
         this.initializeTodoList();
         this.dnd.bindWindowListeners();
         this.notification = new Notification();
+        this.datePicker = new DatePicker(new Date(2023, 7,12), this);
     }
 
     initializeTodoList() {

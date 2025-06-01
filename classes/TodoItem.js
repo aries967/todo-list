@@ -22,7 +22,7 @@ export const TodoItem = class {
                 </label>
                 <div class="todo-item__data-container">
                     <div class="todo-item__title">${this.title}</div>
-                    <div class="todo-item__due-date" data-value=${this.dueDate}><i class="fa-regular fa-calendar"></i> ${relativeDate(new Date(Date.parse(this.dueDate)))}</div>
+                    <div class="todo-item__due-date" data-value=${this.dueDate} data-edit="false"><i class="fa-regular fa-calendar"></i> ${relativeDate(new Date(Date.parse(this.dueDate)))}</div>
                 </div>
                 <div class="todo-item__actions-container">
                     <button class="todo-item__confirm"><i class="fa-solid fa-check"></i></button>
@@ -75,9 +75,8 @@ export const TodoItem = class {
     }
 
     resetValues() {
-        const title = this.todoApp.findItemById(this.id).title;
-        this.titleElement.value =
-            this.dueDateElement.innerHTML = `<i class="fa-regular fa-calendar"></i> ` + relativeDate(new Date(Date.parse(this.todoApp.findItemById(this.id).dueDate)));
+        this.dueDateElement.innerHTML = `<i class="fa-regular fa-calendar"></i> ` + relativeDate(new Date(Date.parse(this.todoApp.findItemById(this.id).dueDate)));
+        this.dueDateElement.dataset.value = this.todoApp.findItemById(this.id).dueDate;
     }
 
     checkItem() {
@@ -115,21 +114,7 @@ export const TodoItem = class {
     }
 
     #switchDueDateElement() {
-        if (this.dueDateElement.tagName === "DIV") {
-            const value = this.dueDateElement.dataset.value;
-            this.dueDateElement.innerHTML = "";
-            this.dueDateElement.outerHTML = this.dueDateElement.outerHTML.replace("div", "input").replace("</input>", "");
-            this.dueDateElement = this.element.querySelector(".todo-item__due-date");
-            this.dueDateElement.value = value;
-            this.dueDateElement.type = "date";
-        } else {
-            const value = this.dueDateElement.value;
-            this.dueDateElement.outerHTML = this.dueDateElement.outerHTML.concat("</input>").replace("input", "div");
-            this.dueDateElement = this.element.querySelector(".todo-item__due-date");
-            this.dueDateElement.innerHTML = `<i class="fa-regular fa-calendar"></i> ` + relativeDate(new Date(Date.parse(value)));
-            console.log(this.dueDateElement.innerHTML)
-            this.dueDateElement.dataset.value = value;
-        }
+        this.dueDateElement.dataset.edit = this.dueDateElement.dataset.edit === "false" ? "true" : "false";
     }
 
     #toggleCheckboxPlaceholder() {
@@ -156,8 +141,12 @@ export const TodoItem = class {
         if (e.target.classList.contains("todo-item__checkbox")) {
             this.#toggleCheckboxPlaceholder();
             this.todoApp.completeItem(this.id, this.checkboxElement.checked);
+        } else if(e.target.classList.contains("todo-item__due-date") && this.titleElement.tagName === "INPUT") {  
+            let rect = e.target.getBoundingClientRect();
+            console.log(e.target, rect)
+            this.todoApp.datePicker.toggle(rect.x + 10, rect.bottom + 5, new Date(Date.parse(this.dueDateElement.dataset.value)), this);
         } else if (e.target.classList.contains("todo-item__confirm") || e.target.parentElement.classList.contains("todo-item__confirm")) {
-            this.todoApp.editItem(this.id, this.titleElement.value, this.dueDateElement.value);
+            this.todoApp.editItem(this.id, this.titleElement.value, this.dueDateElement.dataset.value);
             this.toggleEditMode();
             this.todoApp.sorter.setSortedItems(this.todoApp.sortChoice);
             this.todoApp.renderList(this.todoApp.sorter.sortedItems);

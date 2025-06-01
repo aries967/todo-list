@@ -6,10 +6,7 @@ export const htmlToElement = (html) => {
 
 export const relativeDate = (date) => {
     const shortMonths = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Now", "Dec"];
-    const longDays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
-    const dayToMilisecond = (day) => {
-        return day * 24 * 3600 * 1000
-    }
+    const longDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
 
     const removeTimeFromDate = (date) => {
         return new Date(date.setHours(0, 0, 0, 0));
@@ -35,4 +32,12 @@ export const relativeDate = (date) => {
 
 export const dateInYYYYMMDD = (date) => {
     return `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2, 0)}-${String(date.getDate()).padStart(2,0)}`;
+}
+
+export const dayToMilisecond = (day) => {
+    return day * 24 * 3600 * 1000
+}
+
+export const isLeapYear = (year) => {
+    return (year % 400 === 0) || (year % 4 === 0 && year % 100 !== 0)  
 }
