@@ -17,35 +17,11 @@ export const DragAndDrop = class {
     }
 
     bindWindowListeners() {
-        window.addEventListener("mousemove", (e) => {
-            if (this.mouseDownedItem === undefined) return;
-            let x = e.clientX;
-            let y = e.clientY;
-            if (Math.hypot(x-this.initX, y-this.initY) >= 50 && this.draggedItem === undefined) {
-                clearTimeout(this.mouseDownTimeout)
-                if (this.todoApp.sortChoice !== "manual") {
-                    this.todoApp.notification.show("You can't change item sorting on non-manual sort");
-                    return;
-                }
-                this.draggedItem = this.mouseDownedItem;
-                this.#dragItem();
-            }
-            if (this.draggedItem === undefined) return;
-            this.draggedItem.element.style.top = (e.clientY + 10) + "px";
-            this.draggedItem.element.style.left = (e.clientX + 10) + "px";
-            this.index = this.#getCoordinateIndex(y);
-            this.todoApp.resetItemsBorderStyle();
-            this.todoApp.setBorderStyleOnItem(this.index);
-        }) 
+        window.addEventListener("mousemove", this.handleMousemoveAndTouchmove.bind(this))
+        window.addEventListener("touchmove", this.handleMousemoveAndTouchmove.bind(this))
 
-        window.addEventListener("mouseup", () => {
-            clearTimeout(this.mouseDownTimeout)
-            this.mouseDownedItem = undefined;
-            if (this.draggedItem === undefined) return;
-            this.todoApp.insertItemOnIndex(this.index, this.draggedItem);
-            this.draggedItem = undefined;
-            this.coordinates = [];
-        })
+        window.addEventListener("mouseup", this.handleMouseupAndTouchend.bind(this))
+        window.addEventListener("touchend", this.handleMouseupAndTouchend.bind(this))
     }
 
     #dragItem() {
@@ -65,26 +41,76 @@ export const DragAndDrop = class {
 
     bindItemListeners(items) {
         items.forEach(item => {
-            item.element.addEventListener("mousedown", (e) => {
-                this.mouseDownedItem = item;
-                this.initX = e.clientX;
-                this.initY = e.clientY;
-                this.mouseDownTimeout = setTimeout(() => {
-                    if (this.todoApp.sortChoice !== "manual") {
-                        this.todoApp.notification.show("You can't change item sorting on non-manual sort");
-                        clearTimeout(this.mouseDownTimeout);
-                        return;
-                    }
-                    this.draggedItem = this.mouseDownedItem;
-                    this.#dragItem();
-                    this.draggedItem.element.style.top = (this.initY + 10) + "px";
-                    this.draggedItem.element.style.left = (this.initX + 10) + "px";
-                    this.index = this.#getCoordinateIndex(this.initY);
-                    this.todoApp.resetItemsBorderStyle();
-                    this.todoApp.setBorderStyleOnItem(this.index);
-                }, 1000)
-            })
+            item.element.addEventListener("touchstart", this.handleItemMousedownAndTouchstart.bind(this))
+            item.element.addEventListener("mousedown", this.handleItemMousedownAndTouchstart.bind(this))
         })
+    }
+
+    handleMousemoveAndTouchmove(e) {
+        e.preventDefault();
+        let x,y;
+        if (this.mouseDownedItem === undefined) return;
+        if (e.type === "touchmove") {
+            x = e.touches[0].clientX;
+            y = e.touches[0].clientY;
+        } else {
+            x = e.clientX;
+            y = e.clientY;
+        }
+        if (Math.hypot(x - this.initX, y - this.initY) >= 50 && this.draggedItem === undefined) {
+            clearTimeout(this.mouseDownTimeout)
+            if (this.todoApp.sortChoice !== "manual") {
+                this.todoApp.notification.show("You can't change item sorting on non-manual sort");
+                return;
+            }
+            this.draggedItem = this.mouseDownedItem;
+            this.#dragItem();
+        }
+        if (this.draggedItem === undefined) return;
+        if (e.type === "touchmove") {
+            this.draggedItem.element.style.top = (e.touches[0].clientY + 10) + "px";
+            this.draggedItem.element.style.left = (e.touches[0].clientX + 10) + "px";
+        } else {
+            this.draggedItem.element.style.top = (e.clientY + 10) + "px";
+            this.draggedItem.element.style.left = (e.clientX + 10) + "px";
+        }
+        this.index = this.#getCoordinateIndex(y);
+        this.todoApp.resetItemsBorderStyle();
+        this.todoApp.setBorderStyleOnItem(this.index);
+    }
+
+    handleMouseupAndTouchend() {
+        clearTimeout(this.mouseDownTimeout)
+        this.mouseDownedItem = undefined;
+        if (this.draggedItem === undefined) return;
+        this.todoApp.insertItemOnIndex(this.index, this.draggedItem);
+        this.draggedItem = undefined;
+        this.coordinates = [];
+    }
+
+    handleItemMousedownAndTouchstart(e) {
+        this.mouseDownedItem = this.todoApp.findItemById(Number(e.currentTarget.dataset.id));
+        if (e.type === "touchstart") {
+            this.initX = e.touches[0].clientX;
+            this.initY = e.touches[0].clientY;
+        } else {
+            this.initX = e.clientX;
+            this.initY = e.clientY;
+        }
+        this.mouseDownTimeout = setTimeout(() => {
+            if (this.todoApp.sortChoice !== "manual") {
+                this.todoApp.notification.show("You can't change item sorting on non-manual sort");
+                clearTimeout(this.mouseDownTimeout);
+                return;
+            }
+            this.draggedItem = this.mouseDownedItem;
+            this.#dragItem();
+            this.draggedItem.element.style.top = (this.initY + 10) + "px";
+            this.draggedItem.element.style.left = (this.initX + 10) + "px";
+            this.index = this.#getCoordinateIndex(this.initY);
+            this.todoApp.resetItemsBorderStyle();
+            this.todoApp.setBorderStyleOnItem(this.index);
+        }, 1000)
     }
 
     removeActiveItem() {

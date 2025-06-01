@@ -8,8 +8,15 @@
     box-sizing: border-box;
 }
 
+html, body {
+    overflow: hidden;
+    overscroll-behavior: contain;
+}
+
 body {
-    min-height: 100vh;
+    height: 100vh;
+    width: 100vw;
+    position: relative;
 }
 
 ul {
@@ -28,10 +35,6 @@ button {
     border-radius: 5px;
     padding: 4px 9px;
     cursor: pointer;
-}
-
-body {
-    min-height: 100vh;
 }
 
 .hide {
@@ -274,4 +277,10 @@ textarea.todo-item__description {
 #dnd-container .todo-item {
     position: absolute;
     width: 400px;
+}
+
+@media screen and (max-width: 600px) {
+    #dnd-container .todo-item {
+        width: 300px;
+    }
 }
