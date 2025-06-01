@@ -21,16 +21,16 @@ export const DragAndDrop = class {
             if (this.mouseDownedItem === undefined) return;
             let x = e.clientX;
             let y = e.clientY;
-            if (Math.hypot(x-this.initX, y-this.initY) < 50 && this.draggedItem === undefined) return;
-            if (this.todoApp.sortChoice !== "manual") {
-                this.todoApp.notification.show("You can't change item sorting on non-manual sort");
-                return
+            if (Math.hypot(x-this.initX, y-this.initY) >= 50 && this.draggedItem === undefined) {
+                clearTimeout(this.mouseDownTimeout)
+                if (this.todoApp.sortChoice !== "manual") {
+                    this.todoApp.notification.show("You can't change item sorting on non-manual sort");
+                    return;
+                }
+                this.draggedItem = this.mouseDownedItem;
+                this.#dragItem();
             }
-            clearTimeout(this.mouseDownTimeout);
-            this.draggedItem = this.mouseDownedItem;
-            this.todoApp.items = this.todoApp.items.filter(item => item.id !== this.draggedItem.id)
-            this.setYCoordinates();
-            this.element.append(this.draggedItem.element);
+            if (this.draggedItem === undefined) return;
             this.draggedItem.element.style.top = (e.clientY + 10) + "px";
             this.draggedItem.element.style.left = (e.clientX + 10) + "px";
             this.index = this.#getCoordinateIndex(y);
@@ -39,12 +39,19 @@ export const DragAndDrop = class {
         }) 
 
         window.addEventListener("mouseup", () => {
-            if (this.draggedItem === undefined || this.mouseDownedItem === undefined) return;
+            clearTimeout(this.mouseDownTimeout)
+            this.mouseDownedItem = undefined;
+            if (this.draggedItem === undefined) return;
             this.todoApp.insertItemOnIndex(this.index, this.draggedItem);
             this.draggedItem = undefined;
-            this.mouseDownedItem = undefined;
             this.coordinates = [];
         })
+    }
+
+    #dragItem() {
+        this.todoApp.items = this.todoApp.items.filter(item => item.id !== this.draggedItem.id)
+        this.setYCoordinates();
+        this.element.append(this.draggedItem.element);
     }
 
     #getCoordinateIndex(y) {
@@ -63,8 +70,19 @@ export const DragAndDrop = class {
                 this.initX = e.clientX;
                 this.initY = e.clientY;
                 this.mouseDownTimeout = setTimeout(() => {
-                    this.mouseDownedItem = undefined;
-                }, 350)
+                    if (this.todoApp.sortChoice !== "manual") {
+                        this.todoApp.notification.show("You can't change item sorting on non-manual sort");
+                        clearTimeout(this.mouseDownTimeout);
+                        return;
+                    }
+                    this.draggedItem = this.mouseDownedItem;
+                    this.#dragItem();
+                    this.draggedItem.element.style.top = (this.initY + 10) + "px";
+                    this.draggedItem.element.style.left = (this.initX + 10) + "px";
+                    this.index = this.#getCoordinateIndex(this.initY);
+                    this.todoApp.resetItemsBorderStyle();
+                    this.todoApp.setBorderStyleOnItem(this.index);
+                }, 1000)
             })
         })
     }
