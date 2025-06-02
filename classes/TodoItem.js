@@ -140,10 +140,9 @@ export const TodoItem = class {
     #handleClick(e) {
         if (e.target.classList.contains("todo-item__checkbox")) {
             this.#toggleCheckboxPlaceholder();
-            this.todoApp.completeItem(this.id, this.checkboxElement.checked);
+            this.completed = !this.completed;
         } else if (e.target.classList.contains("todo-item__due-date") && this.titleElement.tagName === "INPUT") {
             let rect = e.target.getBoundingClientRect();
-            console.log(e.target, rect)
             this.todoApp.datePicker.toggle(rect.x + 10, rect.bottom + 5, new Date(Date.parse(this.dueDateElement.dataset.value)), this);
         } else if (e.target.classList.contains("todo-item__confirm") || e.target.parentElement.classList.contains("todo-item__confirm")) {
             if (this.element.classList.contains("todo-item--new")) this.todoApp.items.unshift(this);

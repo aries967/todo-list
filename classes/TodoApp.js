@@ -65,17 +65,6 @@ export const TodoApp = class {
         this.items = this.items.filter(i => i.id !== item.id);
     }
 
-    completeItem(id, completed) {
-        const item = this.findItemById(id);
-        const itemIndex = this.findIndexItemById(id);
-        const destinationIndex = completed ? this.findFirstCompletedItemIndex() : 0;
-        item.completed = completed;
-        this.items.splice(destinationIndex, 0, item);
-        if (completed) this.items.splice(itemIndex,1);
-        if (!completed) this.items.splice(itemIndex+1,1)
-        this.renderList();
-    }
-
     editItem(id, title, dueDate) {
         const item = this.findItemById(id);
         const prevTitle = item.title;
