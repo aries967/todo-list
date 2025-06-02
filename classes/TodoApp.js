@@ -29,9 +29,7 @@ export const TodoApp = class {
         let items = this.sorter.sortedItems;
         this.todoList.clear();
         items.forEach(item => {
-            this.todoList.appendHTML(item.html);
-            item.setElementSelector(this.todoList.element.lastElementChild);
-            if (item.completed) item.checkItem()
+            this.todoList.appendItem(item);
         })
         this.dnd.bindItemListeners(this.items);
     }
@@ -52,8 +50,7 @@ export const TodoApp = class {
     addItem() {
         const id = Date.now();
         const item = new TodoItem(id, "", dateInYYYYMMDD(new Date()), false, this);
-        this.todoList.prependHTML(item.html);
-        item.setElementSelector(this.todoList.element.firstElementChild);
+        this.todoList.prependItem(item);
         item.element.classList.add("todo-item--new");
         item.toggleEditMode();
         this.dnd.bindItemListeners(this.items);

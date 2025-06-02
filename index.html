@@ -17,13 +17,6 @@
         <h1>Your To Do</h1>
         <div id="todo-buttons">
             <button type="button" id="todo-new">+ New Task</button>
-            <!-- <select name="todo-sort" id="todo-sort">
-                <option value="manual">Manual</option>
-                <option value="a-z">A - Z</option>
-                <option value="z-a">Z - A</option>
-                <option value="date-asc">Date Ascending</option>
-                <option value="date-desc">Date Descending</option>
-            </select> -->
             <div id="todo-sort">
                 <button id="todo-sort__toggle" data-active="false"><i class="fa-solid fa-arrow-up-wide-short"></i>
                     Sort</button>
@@ -38,32 +31,34 @@
             </div>
         </div>
         <ul id="todo-list">
-            <!-- <li class="todo-item" data-id="2">
-                <div class="todo-item__inner-container">
-                    <label>
-                        <span class="todo-item__checkbox-placeholder" data-completed="false">
-                            <i class="fa-solid fa-check"></i>
-                        </span>
-                        <input type="checkbox" class="todo-item__checkbox">
-                    </label>
-                    <div class="todo-item__data-container">
-                        <div class="todo-item__title">Item Name</div>
-                        <div class="todo-item__due-date" data-value="2025-05-30" data-edit="false"><i
-                                class="fa-regular fa-calendar"></i>Today</div>
+            <template id="todo-item-template">
+                <li class="todo-item">
+                    <div class="todo-item__inner-container">
+                        <label>
+                            <input type="checkbox" class="todo-item__checkbox">
+                            <span class="todo-item__checkbox-placeholder">
+                                <i class="fa-solid fa-check"></i>
+                            </span>
+                        </label>
+                        <div class="todo-item__data-container">
+                            <div class="todo-item__title"></div>
+                            <div class="todo-item__due-date" data-edit="false"><i
+                                    class="fa-regular fa-calendar"></i></div>
+                        </div>
+                        <div class="todo-item__actions-container">
+                            <button class="todo-item__confirm"><i class="fa-solid fa-check"></i></button>
+                            <button class="todo-item__cancel"><i class="fa-solid fa-x"></i></button>
+                            <button class="todo-item__actions-toggle"><i class="fa-solid fa-ellipsis-vertical"></i></button>
+                            <ul class="todo-item__actions">
+                                <li class="todo-item__up"><i class="fa-solid fa-arrow-up"></i> Move Item Up</li>
+                                <li class="todo-item__down"><i class="fa-solid fa-arrow-down"></i> Move Item Down</li>
+                                <li class="todo-item__edit"><i class="fa-solid fa-pencil"></i> Edit Item</li>
+                                <li class="todo-item__delete"><i class="fa-solid fa-trash"></i> Delete Item</li>
+                            </ul>
+                        </div>
                     </div>
-                    <div class="todo-item__actions-container">
-                        <button class="todo-item__confirm"><i class="fa-solid fa-check"></i></button>
-                        <button class="todo-item__cancel"><i class="fa-solid fa-x"></i></button>
-                        <button class="todo-item__actions-toggle"><i class="fa-solid fa-ellipsis-vertical"></i></button>
-                        <ul class="todo-item__actions">
-                            <li class="todo-item__up"><i class="fa-solid fa-arrow-up"></i> Move Item Up</li>
-                            <li class="todo-item__down"><i class="fa-solid fa-arrow-down"></i> Move Item Down</li>
-                            <li class="todo-item__edit"><i class="fa-solid fa-pencil"></i> Edit Item</li>
-                            <li class="todo-item__delete"><i class="fa-solid fa-trash"></i> Delete Item</li>
-                        </ul>
-                    </div>
-                </div>
-            </li> -->
+                </li>
+            </template>
         </ul>
         <div id="notification">
         </div>

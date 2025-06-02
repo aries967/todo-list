@@ -1,64 +1,39 @@
 import { htmlToElement, relativeDate } from "../functions.js";
 
 export const TodoItem = class {
+    static template = document.getElementById("todo-item-template");
     constructor(id, title, dueDate, completed, todoApp) {
         this.todoApp = todoApp;
         this.id = id;
         this.title = title;
         this.dueDate = dueDate;
         this.completed = completed;
-        this.setItemHTML();
+        this.setElements();
+        this.#delegateClickEvents();
     }
 
-    setItemHTML() {
-        this.html = `
-        <li class="todo-item" data-id="${this.id}">
-            <div class="todo-item__inner-container">
-                <label>
-                    <span class="todo-item__checkbox-placeholder" data-completed="false">
-                        <i class="fa-solid fa-check"></i>
-                    </span>
-                    <input type="checkbox" class="todo-item__checkbox">
-                </label>
-                <div class="todo-item__data-container">
-                    <div class="todo-item__title">${this.title}</div>
-                    <div class="todo-item__due-date" data-value="${this.dueDate}" data-edit="false"><i class="fa-regular fa-calendar"></i> ${relativeDate(new Date(Date.parse(this.dueDate)))}</div>
-                </div>
-                <div class="todo-item__actions-container">
-                    <button class="todo-item__confirm"><i class="fa-solid fa-check"></i></button>
-                        <button class="todo-item__cancel"><i class="fa-solid fa-x"></i></button>
-                    <button class="todo-item__actions-toggle"><i class="fa-solid fa-ellipsis-vertical"></i></button>
-                    <ul class="todo-item__actions">
-                        <li class="todo-item__up"><i class="fa-solid fa-arrow-up"></i> Move Item Up</li>
-                        <li class="todo-item__down"><i class="fa-solid fa-arrow-down"></i> Move Item Down</li>
-                        <li class="todo-item__edit"><i class="fa-solid fa-pencil"></i> Edit Item</li>
-                        <li class="todo-item__delete"><i class="fa-solid fa-trash"></i> Delete Item</li>
-                    </ul>
-                </div>
-            </div>
-        </li>
-    `;
-    }
-
-    setElementSelector(element) {
-        this.element = element;
-        this.checkboxElement = this.element.querySelector(".todo-item__checkbox")
-        this.checkboxElementPlaceholder = this.element.querySelector(".todo-item__checkbox-placeholder");
+    setElements() {
+        this.element = TodoItem.template.content.firstElementChild.cloneNode(true);
+        this.element.dataset.id = this.id;
         this.titleElement = this.element.querySelector(".todo-item__title");
+        this.titleElement.textContent = this.title;
         this.dueDateElement = this.element.querySelector(".todo-item__due-date");
-        this.deleteButton = this.element.querySelector(".todo-item__delete");
-        this.editButton = this.element.querySelector(".todo-item__edit");
+        this.dueDateElement.innerHTML += relativeDate(new Date(Date.parse(this.dueDate)));
+        this.dueDateElement.dataset.value = this.dueDate;
+        this.checkboxElement = this.element.querySelector(".todo-item__checkbox");
+        if (this.completed) this.checkboxElement.checked = true;
+        this.checkboxElementPlaceholder = this.element.querySelector(".todo-item__checkbox-placeholder");
         this.confirmButton = this.element.querySelector(".todo-item__confirm");
         this.cancelButton = this.element.querySelector(".todo-item__cancel");
-        this.actionsToggleButton = this.element.querySelector(".todo-item__actions-toggle")
-        this.#delegateClickEvents();
+        this.actionsToggleButton = this.element.querySelector(".todo-item__actions-toggle");
     }
 
     edit(title, dueDate) {
         this.title = title;
         this.dueDate = dueDate;
-        this.setItemHTML();
-        this.innerHTML = htmlToElement(this.html).innerHTML;
+        this.titleElement.textContent = this.title;
+        this.dueDateElement.innerHTML = `<i
+                                    class="fa-regular fa-calendar"></i>` + relativeDate(new Date(Date.parse(this.dueDate)));
     }
 
     toggleEditMode() {
@@ -70,11 +45,6 @@ export const TodoItem = class {
     resetValues() {
         this.dueDateElement.innerHTML = `<i class="fa-regular fa-calendar"></i> ` + relativeDate(new Date(Date.parse(this.todoApp.findItemById(this.id).dueDate)));
         this.dueDateElement.dataset.value = this.todoApp.findItemById(this.id).dueDate;
-    }
-
-    checkItem() {
-        this.checkboxElement.checked = true;
-        this.#toggleCheckboxPlaceholder();
     }
 
     swapWithPreviousSibling() {
@@ -111,12 +81,8 @@ export const TodoItem = class {
         this.dueDateElement.dataset.edit = this.dueDateElement.dataset.edit === "false" ? "true" : "false";
     }
 
-    #toggleCheckboxPlaceholder() {
-        this.checkboxElementPlaceholder.dataset.completed = this.checkboxElement.checked;
-    }
-
     #delegateClickEvents() {
-        this.element.addEventListener("click", this.#handleClick.bind(this), false)
+        this.element.addEventListener("click", this.#handleClick.bind(this))
     }
 
     #toggleConfirmCancel() {
@@ -133,7 +99,6 @@ export const TodoItem = class {
 
     #handleClick(e) {
         if (e.target.classList.contains("todo-item__checkbox")) {
-            this.#toggleCheckboxPlaceholder();
             this.completed = !this.completed;
         } else if (e.target.classList.contains("todo-item__due-date") && this.titleElement.tagName === "INPUT") {
             let rect = e.target.getBoundingClientRect();

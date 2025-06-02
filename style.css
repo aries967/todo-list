@@ -148,11 +148,11 @@ button {
     font-size: 10px;
 }
 
-.todo-item__checkbox-placeholder[data-completed="false"] i{
+.todo-item__checkbox:not(:checked) + .todo-item__checkbox-placeholder i{
     opacity: 0;
 }
 
-.todo-item__checkbox-placeholder[data-completed="true"] {
+.todo-item__checkbox:checked + .todo-item__checkbox-placeholder{
     background-color: var(--DARK-BG-COLOR);
 }
 
@@ -263,7 +263,7 @@ textarea.todo-item__description {
     margin-right: 5px;
 }
 
-.todo-item:first-child .todo-item__up {
+.todo-item:first-of-type .todo-item__up {
     display: none;
 }
 
