@@ -1,10 +1,10 @@
-export const htmlToElement = (html) => {
+function htmlToElement(html) {
     const template = document.createElement("template");
     template.innerHTML = html;
     return template.content.firstElementChild;
 }
 
-export const relativeDate = (date) => {
+function relativeDate(date) {
     const shortMonths = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Now", "Dec"];
     const longDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
 
@@ -14,7 +14,7 @@ export const relativeDate = (date) => {
 
     const currentDate = removeTimeFromDate(new Date());
     date = removeTimeFromDate(date);
-    
+
     if (currentDate - date === 0) {
         return "Today"
     } else if (currentDate - date === dayToMilisecond(1) && currentDate - date > 0) {
@@ -30,14 +30,16 @@ export const relativeDate = (date) => {
     }
 }
 
-export const dateInYYYYMMDD = (date) => {
-    return `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2, 0)}-${String(date.getDate()).padStart(2,0)}`;
+function dateInYYYYMMDD(date) {
+    return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, 0)}-${String(date.getDate()).padStart(2, 0)}`;
 }
 
-export const dayToMilisecond = (day) => {
+function dayToMilisecond(day) {
     return day * 24 * 3600 * 1000
 }
 
-export const isLeapYear = (year) => {
-    return (year % 400 === 0) || (year % 4 === 0 && year % 100 !== 0)  
+function isLeapYear(year) {
+    return (year % 400 === 0) || (year % 4 === 0 && year % 100 !== 0)
 }
+
+export { htmlToElement, relativeDate, dateInYYYYMMDD, dayToMilisecond, isLeapYear }
