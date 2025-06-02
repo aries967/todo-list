@@ -161,14 +161,14 @@ export const TodoItem = class {
                 this.todoApp.notification.show("You can't change item sorting on non-manual sort");
                 return
             }
-            this.todoApp.moveItemUp(this.id);
+            this.todoApp.moveItemUp(this);
             this.#toggleActions();
         } else if (e.target.classList.contains("todo-item__down")) {
             if (this.todoApp.sorter.sortChoice !== "manual") {
                 this.todoApp.notification.show("You can't change item sorting on non-manual sort");
                 return
             }
-            this.todoApp.moveItemDown(this.id);
+            this.todoApp.moveItemDown(this);
             this.#toggleActions();
         } else if (e.target.classList.contains("todo-item__edit")) {
             this.toggleEditMode();

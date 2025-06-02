@@ -65,15 +65,15 @@ export const TodoApp = class {
         this.items = this.items.filter(i => i.id !== item.id);
     }
 
-    moveItemUp(id) {
-        const index = this.findIndexItemById(id);
-        this.items[index].swapWithPreviousSibling();
+    moveItemUp(item) {
+        const index = this.findIndexItemById(item.id)
+        item.swapWithPreviousSibling();
         this.swapItems(index, index-1);
     }
 
-    moveItemDown(id) {
-        const index = this.findIndexItemById(id);
-        this.items[index].swapWithNextSibling();
+    moveItemDown(item) {
+        const index = this.findIndexItemById(item.id);
+        item.swapWithNextSibling();
         this.swapItems(index, index+1);
     }
 
