@@ -22,7 +22,7 @@ export const TodoItem = class {
                 </label>
                 <div class="todo-item__data-container">
                     <div class="todo-item__title">${this.title}</div>
-                    <div class="todo-item__due-date" data-value=${this.dueDate} data-edit="false"><i class="fa-regular fa-calendar"></i> ${relativeDate(new Date(Date.parse(this.dueDate)))}</div>
+                    <div class="todo-item__due-date" data-value="${this.dueDate}" data-edit="false"><i class="fa-regular fa-calendar"></i> ${relativeDate(new Date(Date.parse(this.dueDate)))}</div>
                 </div>
                 <div class="todo-item__actions-container">
                     <button class="todo-item__confirm"><i class="fa-solid fa-check"></i></button>
@@ -109,7 +109,7 @@ export const TodoItem = class {
         this.titleElement.addEventListener("keydown", (e) => {
             if (e.code === "Enter" && e.currentTarget.value !== "") {
                 if (this.element.classList.contains("todo-item--new")) this.todoApp.items.unshift(this);
-                this.edit(this.titleElement.value, this.dueDateElement.value)
+                this.edit(this.titleElement.value, this.dueDateElement.dataset.value)
                 this.toggleEditMode()
             }
         })
@@ -146,7 +146,7 @@ export const TodoItem = class {
         } else if (e.target.classList.contains("todo-item__due-date") && this.titleElement.tagName === "INPUT") {
             let rect = e.target.getBoundingClientRect();
             this.todoApp.datePicker.toggle(rect.x + 10, rect.bottom + 5, new Date(Date.parse(this.dueDateElement.dataset.value)), this);
-        } else if (e.target.classList.contains("todo-item__confirm") || e.target.parentElement.classList.contains("todo-item__confirm")) {
+        } else if ((e.target.classList.contains("todo-item__confirm") || e.target.parentElement.classList.contains("todo-item__confirm")) && this.titleElement.value !== "") {
             if (this.element.classList.contains("todo-item--new")) this.todoApp.items.unshift(this);
             this.edit(this.titleElement.value, this.dueDateElement.dataset.value);
             this.toggleEditMode();
