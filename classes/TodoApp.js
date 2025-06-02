@@ -125,8 +125,12 @@ export const TodoApp = class {
     }
 
     insertItemOnIndex(index, item) {
+        this.resetItemsBorderStyle();
         this.items.splice(index, 0, item);
-        this.renderList();
-        this.dnd.removeActiveItem();
+        if (index === 0) {
+            this.todoList.prependItem(item);
+            return;
+        }
+        this.items[index-1].element.after(item.element);
     }
 }

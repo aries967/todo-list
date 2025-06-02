@@ -20,6 +20,10 @@ export const TodoList = class {
         this.element.append(item.element);
     }
 
+    prependItem(item) {
+        this.element.prepend(item.element);
+    }
+
     getItemSelector(id) {
         return this.element.querySelector(`[data-id="${id}"]`);
     }
