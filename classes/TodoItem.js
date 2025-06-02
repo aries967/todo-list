@@ -146,13 +146,12 @@ export const TodoItem = class {
             console.log(e.target, rect)
             this.todoApp.datePicker.toggle(rect.x + 10, rect.bottom + 5, new Date(Date.parse(this.dueDateElement.dataset.value)), this);
         } else if (e.target.classList.contains("todo-item__confirm") || e.target.parentElement.classList.contains("todo-item__confirm")) {
+            if (this.element.classList.contains("todo-item--new")) this.todoApp.items.unshift(this);
             this.todoApp.editItem(this.id, this.titleElement.value, this.dueDateElement.dataset.value);
             this.toggleEditMode();
             this.todoApp.renderList();
         } else if (e.target.classList.contains("todo-item__cancel") || e.target.parentElement.classList.contains("todo-item__cancel")) {
-            if (this.element.classList.contains("todo-item--new")) {
-                this.todoApp.items.pop()
-            } else {
+            if (!this.element.classList.contains("todo-item--new")) {
                 this.resetValues();
                 this.toggleEditMode();
             }
