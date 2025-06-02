@@ -267,7 +267,7 @@ textarea.todo-item__description {
     display: none;
 }
 
-.todo-item:last-child .todo-item__down {
+.todo-item:last-of-type .todo-item__down {
     display: none;
 }
 

@@ -98,43 +98,54 @@ export const TodoItem = class {
     }
 
     #handleClick(e) {
-        if (e.target.classList.contains("todo-item__checkbox")) {
-            this.completed = !this.completed;
-        } else if (e.target.classList.contains("todo-item__due-date") && this.titleElement.tagName === "INPUT") {
-            let rect = e.target.getBoundingClientRect();
-            this.todoApp.datePicker.toggle(rect.x + 10, rect.bottom + 5, new Date(Date.parse(this.dueDateElement.dataset.value)), this);
-        } else if ((e.target.classList.contains("todo-item__confirm") || e.target.parentElement.classList.contains("todo-item__confirm")) && this.titleElement.value !== "") {
-            if (this.element.classList.contains("todo-item--new")) this.todoApp.items.unshift(this);
-            this.edit(this.titleElement.value, this.dueDateElement.dataset.value);
-            this.toggleEditMode();
-        } else if (e.target.classList.contains("todo-item__cancel") || e.target.parentElement.classList.contains("todo-item__cancel")) {
-            if (this.element.classList.contains("todo-item--new")) this.element.remove();
-            this.edit(this.title, this.dueDate);
-            this.toggleEditMode();
-        } else if (e.target.classList.contains("todo-item__actions-toggle") || e.target.parentElement.classList.contains("todo-item__actions-toggle")) {
-            this.#toggleActions();
-        } else if (e.target.classList.contains("todo-item__up")) {
-            if (this.todoApp.sorter.sortChoice !== "manual") {
-                this.todoApp.notification.show("You can't change item sorting on non-manual sort");
-                return
-            }
-            this.todoApp.moveItemUp(this);
-            this.#toggleActions();
-        } else if (e.target.classList.contains("todo-item__down")) {
-            if (this.todoApp.sorter.sortChoice !== "manual") {
-                this.todoApp.notification.show("You can't change item sorting on non-manual sort");
-                return
-            }
-            this.todoApp.moveItemDown(this);
-            this.#toggleActions();
-        } else if (e.target.classList.contains("todo-item__edit")) {
-            this.toggleEditMode();
-            this.#toggleActions();
-        } else if (e.target.classList.contains("todo-item__delete")) {
-            this.todoApp.deleteItem(this);
-            this.#toggleActions();
-        } else if ((e.target.classList.contains("todo-item__data-container") || e.target.classList.contains("todo-item__title") || e.target.classList.contains("todo-item__due-date")) && e.detail === 2 && this.titleElement.tagName === "DIV") {
-            this.toggleEditMode();
+        switch (true){
+            case (e.target.classList.contains("todo-item__checkbox")):
+                this.completed = !this.completed;
+                break;
+            case (e.target.classList.contains("todo-item__due-date") && this.titleElement.tagName === "INPUT"):
+                let rect = e.target.getBoundingClientRect();
+                this.todoApp.datePicker.toggle(rect.x + 10, rect.bottom + 5, new Date(Date.parse(this.dueDateElement.dataset.value)), this);
+                break;
+            case ((e.target.classList.contains("todo-item__confirm") || e.target.parentElement.classList.contains("todo-item__confirm")) && this.titleElement.value !== ""):
+                if (this.element.classList.contains("todo-item--new")) this.todoApp.items.unshift(this);
+                this.edit(this.titleElement.value, this.dueDateElement.dataset.value);
+                this.toggleEditMode();
+                break;
+            case (e.target.classList.contains("todo-item__cancel") || e.target.parentElement.classList.contains("todo-item__cancel")):
+                if (this.element.classList.contains("todo-item--new")) this.element.remove();
+                this.edit(this.title, this.dueDate);
+                this.toggleEditMode();
+                break;
+            case (e.target.classList.contains("todo-item__actions-toggle") || e.target.parentElement.classList.contains("todo-item__actions-toggle")):
+                this.#toggleActions();
+                break;
+            case (e.target.classList.contains("todo-item__up")):
+                if (this.todoApp.sorter.sortChoice !== "manual") {
+                    this.todoApp.notification.show("You can't change item sorting on non-manual sort");
+                    return
+                }
+                this.todoApp.moveItemUp(this);
+                this.#toggleActions();
+                break;
+            case (e.target.classList.contains("todo-item__down")):
+                if (this.todoApp.sorter.sortChoice !== "manual"){
+                    this.todoApp.notification.show("You can't change item sorting on non-manual sort");
+                    return
+                }
+                this.todoApp.moveItemDown(this);
+                this.#toggleActions();
+                break;
+            case (e.target.classList.contains("todo-item__edit")):
+                this.toggleEditMode();
+                this.#toggleActions();
+                break;
+            case (e.target.classList.contains("todo-item__delete")):
+                this.todoApp.deleteItem(this);
+                this.#toggleActions();
+                break;
+            case ((e.target.classList.contains("todo-item__data-container") || e.target.classList.contains("todo-item__title") || e.target.classList.contains("todo-item__due-date")) && e.detail === 2 && this.titleElement.tagName === "DIV"):
+                this.toggleEditMode();
+                break;
         }
     }
 }
