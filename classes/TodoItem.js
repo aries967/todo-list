@@ -54,14 +54,6 @@ export const TodoItem = class {
         this.#delegateClickEvents();
     }
 
-    moveToTodoList() {
-        this.todoApp.todoList.appendItem(this);
-    }
-
-    moveToTodoListCompleted() {
-        this.todoApp.todoListCompleted.appendItem(this);
-    }
-
     edit(title, dueDate) {
         this.title = title;
         this.dueDate = dueDate;
