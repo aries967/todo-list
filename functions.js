@@ -1,9 +1,19 @@
+/**
+ * Convert html string to element
+ * @param {String} html
+ * @returns {HTMLElement}
+ */
 function htmlToElement(html) {
     const template = document.createElement("template");
     template.innerHTML = html;
     return template.content.firstElementChild;
 }
 
+/**
+ * Convert date into a relative format
+ * @param {Date} date
+ * @returns {String} 
+ */
 function relativeDate(date) {
     const shortMonths = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Now", "Dec"];
     const longDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
@@ -30,14 +40,29 @@ function relativeDate(date) {
     }
 }
 
+/**
+ * Convert a date into YYYY-MM-DD format
+ * @param {Date} date 
+ * @returns {String}
+ */
 function dateInYYYYMMDD(date) {
     return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, 0)}-${String(date.getDate()).padStart(2, 0)}`;
 }
 
+/**
+ * Convert day to miliseconds
+ * @param {Number} day 
+ * @returns {Number}
+ */
 function dayToMilisecond(day) {
     return day * 24 * 3600 * 1000
 }
 
+/**
+ * Determine if a year is a leap year
+ * @param {Number} year
+ * @returns {Boolean}
+ */
 function isLeapYear(year) {
     return (year % 400 === 0) || (year % 4 === 0 && year % 100 !== 0)
 }
