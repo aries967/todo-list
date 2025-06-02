@@ -8,26 +8,24 @@ import { DatePicker } from "./DatePicker.js";
 
 export const TodoApp = class {
     constructor() {
-        this.element = document.getElementById("todo-app");
         this.items = this.getItemsFromLocal();
-        this.todoList = new TodoList(this);
+
+        this.element = document.getElementById("todo-app");
         this.newBtnElement = document.getElementById("todo-new");
-        this.newBtnElement.addEventListener("click", this.addItem.bind(this))
-        this.sorter = new Sorter(this)
-        this.sortChoice = this.sorter.getSortingChoice();
+        this.newBtnElement.addEventListener("click", this.addItem.bind(this));
+
+        this.todoList = new TodoList(this);
+        this.sorter = new Sorter(this);
         this.dnd = new DragAndDrop(this);
-        this.initializeTodoList();
-        this.dnd.bindWindowListeners();
         this.notification = new Notification();
         this.datePicker = new DatePicker(new Date(2023, 7,12), this);
+
+        this.renderList();
+        this.dnd.bindWindowListeners();
     }
 
-    initializeTodoList() {
-        this.sorter.setSort(this.sortChoice);
-        this.renderList(this.sorter.sortedItems);
-    }
-
-    renderList(items) {
+    renderList() {
+        let items = this.sorter.sortedItems;
         this.todoList.clear();
         items.forEach(item => {
             this.todoList.appendHTML(item.html);
@@ -77,8 +75,7 @@ export const TodoApp = class {
         this.items.splice(destinationIndex, 0, item);
         if (completed) this.items.splice(itemIndex,1);
         if (!completed) this.items.splice(itemIndex+1,1)
-        this.sorter.setSortedItems(this.sortChoice);
-        this.renderList(this.sorter.sortedItems);
+        this.renderList();
     }
 
     editItem(id, title, dueDate) {
@@ -149,8 +146,7 @@ export const TodoApp = class {
 
     insertItemOnIndex(index, item) {
         this.items.splice(index, 0, item);
-        this.sorter.setSortedItems(this.sortChoice);
-        this.renderList(this.sorter.sortedItems);
+        this.renderList();
         this.dnd.removeActiveItem();
     }
 }

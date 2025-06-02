@@ -6,12 +6,13 @@ export const Sorter = class {
         this.optionElements = document.querySelectorAll("#todo-sort__options > li");
         this.optionElements.forEach(element => element.addEventListener("click", this.handleSelect.bind(this)))
         this.todoApp = todoApp;
-        this.sortedItems = todoApp.items;
+        this.sortChoice = this.getSortingChoice();
+        this.setSort();
     }
 
     handleSelect(e) {
-        this.setSortedItems(e.currentTarget.dataset.value); 
-        this.todoApp.sortChoice = e.currentTarget.dataset.value;
+        this.sortChoice = e.currentTarget.dataset.value;
+        this.setSortedItems(); 
         this.toggleElement.innerHTML = '<i class="fa-solid fa-arrow-up-wide-short"></i> ' + e.currentTarget.textContent;  
         this.handleToggle();
         this.storeSortingChoice()
@@ -22,17 +23,17 @@ export const Sorter = class {
         this.toggleElement.dataset.active = this.toggleElement.dataset.active === "false" ? "true" : "false";
     }
 
-    setSort(value) {
+    setSort() {
         Array.from(this.optionElements).forEach(element => {
-            if (element.dataset.value === value) {
+            if (element.dataset.value === this.sortChoice) {
                 this.toggleElement.innerHTML = '<i class="fa-solid fa-arrow-up-wide-short"></i>' + element.textContent;
             }
         });
-        this.setSortedItems(value);
+        this.setSortedItems();
     }
 
-    setSortedItems(value) {
-        switch (value) {
+    setSortedItems() {
+        switch (this.sortChoice) {
             case "manual":
                 this.sortedItems = this.todoApp.items;
                 break;
@@ -68,7 +69,7 @@ export const Sorter = class {
     }
 
     storeSortingChoice() {
-        localStorage.setItem("sort", this.todoApp.sortChoice);
+        localStorage.setItem("sort", this.sortChoice);
     }
 
     getSortingChoice() {

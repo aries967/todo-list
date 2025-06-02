@@ -148,8 +148,7 @@ export const TodoItem = class {
         } else if (e.target.classList.contains("todo-item__confirm") || e.target.parentElement.classList.contains("todo-item__confirm")) {
             this.todoApp.editItem(this.id, this.titleElement.value, this.dueDateElement.dataset.value);
             this.toggleEditMode();
-            this.todoApp.sorter.setSortedItems(this.todoApp.sortChoice);
-            this.todoApp.renderList(this.todoApp.sorter.sortedItems);
+            this.todoApp.renderList();
         } else if (e.target.classList.contains("todo-item__cancel") || e.target.parentElement.classList.contains("todo-item__cancel")) {
             if (this.element.classList.contains("todo-item--new")) {
                 this.todoApp.items.pop()
@@ -157,19 +156,18 @@ export const TodoItem = class {
                 this.resetValues();
                 this.toggleEditMode();
             }
-            this.todoApp.sorter.setSortedItems(this.todoApp.sortChoice);
-            this.todoApp.renderList(this.todoApp.sorter.sortedItems);
+            this.todoApp.renderList();
         } else if (e.target.classList.contains("todo-item__actions-toggle") || e.target.parentElement.classList.contains("todo-item__actions-toggle")) {
             this.#toggleActions();
         } else if (e.target.classList.contains("todo-item__up")) {
-            if (this.todoApp.sortChoice !== "manual") {
+            if (this.todoApp.sorter.sortChoice !== "manual") {
                 this.todoApp.notification.show("You can't change item sorting on non-manual sort");
                 return
             }
             this.todoApp.moveItemUp(this.id);
             this.#toggleActions();
         } else if (e.target.classList.contains("todo-item__down")) {
-            if (this.todoApp.sortChoice !== "manual") {
+            if (this.todoApp.sorter.sortChoice !== "manual") {
                 this.todoApp.notification.show("You can't change item sorting on non-manual sort");
                 return
             }
