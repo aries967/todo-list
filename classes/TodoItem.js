@@ -141,7 +141,7 @@ export const TodoItem = class {
         if (e.target.classList.contains("todo-item__checkbox")) {
             this.#toggleCheckboxPlaceholder();
             this.todoApp.completeItem(this.id, this.checkboxElement.checked);
-        } else if(e.target.classList.contains("todo-item__due-date") && this.titleElement.tagName === "INPUT") {  
+        } else if (e.target.classList.contains("todo-item__due-date") && this.titleElement.tagName === "INPUT") {
             let rect = e.target.getBoundingClientRect();
             console.log(e.target, rect)
             this.todoApp.datePicker.toggle(rect.x + 10, rect.bottom + 5, new Date(Date.parse(this.dueDateElement.dataset.value)), this);
@@ -176,7 +176,7 @@ export const TodoItem = class {
             this.toggleEditMode();
             this.#toggleActions();
         } else if (e.target.classList.contains("todo-item__delete")) {
-            this.todoApp.deleteItem(this.id);
+            this.todoApp.deleteItem(this);
             this.#toggleActions();
         } else if ((e.target.classList.contains("todo-item__data-container") || e.target.classList.contains("todo-item__title") || e.target.classList.contains("todo-item__due-date")) && e.detail === 2 && this.titleElement.tagName === "DIV") {
             this.toggleEditMode();

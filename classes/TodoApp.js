@@ -59,12 +59,10 @@ export const TodoApp = class {
         this.dnd.bindItemListeners(this.items);
     }
 
-    deleteItem(id) {
-        const item = this.findItemById(id);
-        const title = item.title;
-        this.notification.show(`Task "${title}" has been deleted`);
+    deleteItem(item) {
+        this.notification.show(`Task "${item.title}" has been deleted`);
         item.element.remove();
-        this.items = this.items.filter(item => item.id !== id);
+        this.items = this.items.filter(i => i.id !== item.id);
     }
 
     completeItem(id, completed) {
