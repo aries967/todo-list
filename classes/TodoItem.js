@@ -9,7 +9,7 @@ export const TodoItem = class {
         this.dueDate = dueDate;
         this.completed = completed;
         this.setElements();
-        this.#delegateClickEvents();
+        this.element.addEventListener("click", this.#handleClick.bind(this))
     }
 
     setElements() {
@@ -26,6 +26,7 @@ export const TodoItem = class {
         this.confirmButton = this.element.querySelector(".todo-item__confirm");
         this.cancelButton = this.element.querySelector(".todo-item__cancel");
         this.actionsToggleButton = this.element.querySelector(".todo-item__actions-toggle");
+        this.actionsElement = this.element.querySelector(".todo-item__actions");
     }
 
     edit(title, dueDate) {
@@ -39,12 +40,6 @@ export const TodoItem = class {
     toggleEditMode() {
         this.#toggleConfirmCancel();
         this.#switchTitleElement();
-        this.#switchDueDateElement();
-    }
-
-    resetValues() {
-        this.dueDateElement.innerHTML = `<i class="fa-regular fa-calendar"></i> ` + relativeDate(new Date(Date.parse(this.todoApp.findItemById(this.id).dueDate)));
-        this.dueDateElement.dataset.value = this.todoApp.findItemById(this.id).dueDate;
     }
 
     swapWithPreviousSibling() {
@@ -65,6 +60,7 @@ export const TodoItem = class {
         this.titleElement = this.element.querySelector(".todo-item__title");
         if (this.titleElement.tagName === "INPUT") this.#bindTitleElementEnterEvent()
         this.titleElement.focus();
+        this.titleElement.select();
     }
 
     #bindTitleElementEnterEvent() {
@@ -77,24 +73,16 @@ export const TodoItem = class {
         })
     }
 
-    #switchDueDateElement() {
-        this.dueDateElement.dataset.edit = this.dueDateElement.dataset.edit === "false" ? "true" : "false";
-    }
-
-    #delegateClickEvents() {
-        this.element.addEventListener("click", this.#handleClick.bind(this))
-    }
-
     #toggleConfirmCancel() {
-        this.confirmButton.classList.toggle("todo-item__confirm--active");
-        this.cancelButton.classList.toggle("todo-item__cancel--active");
+        this.confirmButton.classList.toggle("hide");
+        this.cancelButton.classList.toggle("hide");
     }
 
     #toggleActions() {
         this.todoApp.items.forEach(item => {
-            if (item.id !== this.id) item.actionsToggleButton.classList.remove("todo-item__actions-toggle--active")
+            if (item.id !== this.id) item.actionsElement.classList.add("hide")
         });
-        this.actionsToggleButton.classList.toggle("todo-item__actions-toggle--active")
+        this.actionsElement.classList.toggle("hide")
     }
 
     #handleClick(e) {
