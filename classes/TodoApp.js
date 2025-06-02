@@ -65,13 +65,6 @@ export const TodoApp = class {
         this.items = this.items.filter(i => i.id !== item.id);
     }
 
-    editItem(id, title, dueDate) {
-        const item = this.findItemById(id);
-        const prevTitle = item.title;
-        item.edit(title, dueDate);
-        this.notification.show(`Task "${prevTitle}" successfully changed to "${item.title}"`);
-    }
-
     moveItemUp(id) {
         const index = this.findIndexItemById(id);
         this.items[index].swapWithPreviousSibling();

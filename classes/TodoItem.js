@@ -1,4 +1,4 @@
-import { relativeDate } from "../functions.js";
+import { htmlToElement, relativeDate } from "../functions.js";
 
 export const TodoItem = class {
     constructor(id, title, dueDate, completed, todoApp) {
@@ -66,6 +66,7 @@ export const TodoItem = class {
         this.title = title;
         this.dueDate = dueDate;
         this.setItemHTML();
+        this.innerHTML = htmlToElement(this.html).innerHTML;
     }
 
     toggleEditMode() {
@@ -94,9 +95,9 @@ export const TodoItem = class {
 
     #switchTitleElement() {
         if (this.titleElement.tagName === "DIV") {
-            this.titleElement.outerHTML = `<input type="text" class="todo-item__title" value="${this.titleElement.textContent}" placeholder="Title...">`
+            this.titleElement.outerHTML = `<input type="text" class="todo-item__title" value="${this.title}" placeholder="Title...">`
         } else {
-            this.titleElement.outerHTML = `<div class="todo-item__title">${this.titleElement.value}</div>`;
+            this.titleElement.outerHTML = `<div class="todo-item__title">${this.title}</div>`;
         }
 
         this.titleElement = this.element.querySelector(".todo-item__title");
@@ -107,7 +108,8 @@ export const TodoItem = class {
     #bindTitleElementEnterEvent() {
         this.titleElement.addEventListener("keydown", (e) => {
             if (e.code === "Enter" && e.currentTarget.value !== "") {
-                this.todoApp.editItem(this.id, this.titleElement.value, this.dueDateElement.value)
+                if (this.element.classList.contains("todo-item--new")) this.todoApp.items.unshift(this);
+                this.edit(this.titleElement.value, this.dueDateElement.value)
                 this.toggleEditMode()
             }
         })
@@ -146,15 +148,12 @@ export const TodoItem = class {
             this.todoApp.datePicker.toggle(rect.x + 10, rect.bottom + 5, new Date(Date.parse(this.dueDateElement.dataset.value)), this);
         } else if (e.target.classList.contains("todo-item__confirm") || e.target.parentElement.classList.contains("todo-item__confirm")) {
             if (this.element.classList.contains("todo-item--new")) this.todoApp.items.unshift(this);
-            this.todoApp.editItem(this.id, this.titleElement.value, this.dueDateElement.dataset.value);
+            this.edit(this.titleElement.value, this.dueDateElement.dataset.value);
             this.toggleEditMode();
-            this.todoApp.renderList();
         } else if (e.target.classList.contains("todo-item__cancel") || e.target.parentElement.classList.contains("todo-item__cancel")) {
-            if (!this.element.classList.contains("todo-item--new")) {
-                this.resetValues();
-                this.toggleEditMode();
-            }
-            this.todoApp.renderList();
+            if (this.element.classList.contains("todo-item--new")) this.element.remove();
+            this.edit(this.title, this.dueDate);
+            this.toggleEditMode();
         } else if (e.target.classList.contains("todo-item__actions-toggle") || e.target.parentElement.classList.contains("todo-item__actions-toggle")) {
             this.#toggleActions();
         } else if (e.target.classList.contains("todo-item__up")) {
