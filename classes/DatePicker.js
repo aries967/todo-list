@@ -16,7 +16,7 @@ export const DatePicker = class {
         this.prevButton = document.getElementById("date-picker__prev");
         this.nextButton = document.getElementById("date-picker__next");
         this.datesElement = document.getElementById("date-picker__dates");
-        Array.from(this.datesElement.children).forEach(child => child.addEventListener("click", this.handleDateClick.bind(this)));
+        this.datesElement.addEventListener("click", this.handleDateClick.bind(this))
         this.prevButton.addEventListener("click", this.handlePrev.bind(this));
         this.nextButton.addEventListener("click", this.handleNext.bind(this))
     }
@@ -114,7 +114,7 @@ export const DatePicker = class {
      * @param {PointerEvent} e 
      */
     handleDateClick(e) {
-        let date = new Date(Date.parse(e.currentTarget.dataset.value));
+        let date = new Date(Date.parse(e.target.dataset.value));
         this.toggle(0, 0, undefined, undefined);
         this.currentItem.dueDateElement.innerHTML = `<i class="fa-regular fa-calendar"></i> ` + relativeDate(date);
         this.currentItem.dueDateElement.dataset.value = dateInYYYYMMDD(date)
