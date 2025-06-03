@@ -146,6 +146,7 @@ button {
     padding: 3px 5px;
     border-radius: var(--BORDER-RADIUS);
     font-size: 10px;
+    cursor: pointer;
 }
 
 .todo-item__checkbox:not(:checked) + .todo-item__checkbox-placeholder i{
@@ -164,6 +165,7 @@ button {
     display: flex;
     flex-direction: column;
     gap: 3px;
+    cursor: pointer;
 }
 
 label:has(.todo-item__checkbox:checked) + .todo-item__data-container > * {

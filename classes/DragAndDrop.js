@@ -43,6 +43,7 @@ export const DragAndDrop = class {
         this.todoApp.items = this.todoApp.items.filter(item => item.id !== this.draggedItem.id)
         this.setYCoordinates();
         this.element.append(this.draggedItem.element);
+        document.body.style.cursor = "move";
     }
 
     /**
@@ -116,6 +117,7 @@ export const DragAndDrop = class {
         this.mouseDownedItem = undefined;
         if (this.draggedItem === undefined) return;
         this.todoApp.insertItemOnIndex(this.index, this.draggedItem);
+        document.body.style.cursor = "default";
         this.draggedItem = undefined;
         this.coordinates = [];
     }
