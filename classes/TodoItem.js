@@ -61,6 +61,7 @@ export const TodoItem = class {
      * Make item editable / uneditable
      */
     toggleEditMode() {
+        this.actionsToggleButton.classList.toggle("hide")
         this.#toggleConfirmCancel();
         this.#switchTitleElement();
     }
@@ -125,7 +126,7 @@ export const TodoItem = class {
         this.todoApp.items.forEach(item => {
             if (item.id !== this.id) item.actionsElement.classList.add("hide")
         });
-        this.actionsElement.classList.toggle("hide")
+        this.actionsElement.classList.toggle("hide");
     }
 
     /**
