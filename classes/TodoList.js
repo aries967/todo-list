@@ -60,10 +60,6 @@ export const TodoList = class {
      * Remove all todoitem element from the DOM
      */
     clear() {
-        Array.from(this.element.children).forEach(el => {
-            if (el.classList.contains("todo-item")) {
-                el.remove()
-            }
-        })
+        this.element.innerHTML = "";
     }
 }
