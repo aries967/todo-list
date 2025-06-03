@@ -1,3 +1,6 @@
+/**
+ * A class that manages the Drag and Drop feature
+ */
 export const DragAndDrop = class {
     mouseDownedItem;
     mouseDownTimeout;
@@ -6,16 +9,25 @@ export const DragAndDrop = class {
     initY;
     index;
 
+    /**
+     * Bind element to property
+     * @param {TodoApp} todoApp - the TodoApp instance
+     */
     constructor(todoApp) {
         this.todoApp = todoApp;
         this.element = document.getElementById("dnd-container");
     }
 
+    /**
+     * Save the middle coordinates of items to a coordinates property for easier access
+     */
     setYCoordinates() {
-        this.coordinates = [];
-        this.coordinates = this.coordinates.concat(this.todoApp.getItemsMiddleCoordinates());
+        this.coordinates = this.todoApp.getItemsMiddleCoordinates();
     }
 
+    /**
+     * Bind event necessary for drag and drop to window
+     */
     bindWindowListeners() {
         window.addEventListener("mousemove", this.handleMousemoveAndTouchmove.bind(this))
         window.addEventListener("touchmove", this.handleMousemoveAndTouchmove.bind(this))
@@ -24,12 +36,21 @@ export const DragAndDrop = class {
         window.addEventListener("touchend", this.handleMouseupAndTouchend.bind(this))
     }
 
+    /**
+     * Make a todo item dragged, reset coordinates
+     */
     #dragItem() {
         this.todoApp.items = this.todoApp.items.filter(item => item.id !== this.draggedItem.id)
         this.setYCoordinates();
         this.element.append(this.draggedItem.element);
     }
 
+    /**
+     * Find the index of the smallest y-coordinate the given y-coordinate is less of
+     * Used this to know the position of mouse relative to the items
+     * @param {Number} y - a y-coordinate
+     * @returns {Number} - the index
+     */
     #getCoordinateIndex(y) {
         let i = 0;
         for (const yCoor of this.coordinates) {
@@ -39,6 +60,10 @@ export const DragAndDrop = class {
         return i;
     }
 
+    /**
+     * Bind event listeners that are used for drag and drop to all items
+     * @param {TodoItem[]} items 
+     */
     bindItemListeners(items) {
         items.forEach(item => {
             item.element.addEventListener("touchstart", this.handleItemMousedownAndTouchstart.bind(this))
@@ -46,6 +71,10 @@ export const DragAndDrop = class {
         })
     }
 
+    /**
+     * Handle the mousemove and touchmove events on window
+     * @param {MouseEvent | TouchEvent} e 
+     */
     handleMousemoveAndTouchmove(e) {
         e.preventDefault();
         let x,y;
@@ -79,6 +108,9 @@ export const DragAndDrop = class {
         this.todoApp.setBorderStyleOnItem(this.index);
     }
 
+    /**
+     * Handles the mouseup and touchend events on window
+     */
     handleMouseupAndTouchend() {
         clearTimeout(this.mouseDownTimeout)
         this.mouseDownedItem = undefined;
@@ -88,6 +120,10 @@ export const DragAndDrop = class {
         this.coordinates = [];
     }
 
+    /**
+     * Handles the mousedown and touchstart events on todo items
+     * @param {MouseEvent | TouchEvent} e 
+     */
     handleItemMousedownAndTouchstart(e) {
         this.mouseDownedItem = this.todoApp.findItemById(Number(e.currentTarget.dataset.id));
         if (e.type === "touchstart") {
@@ -111,10 +147,6 @@ export const DragAndDrop = class {
             this.todoApp.resetItemsBorderStyle();
             this.todoApp.setBorderStyleOnItem(this.index);
         }, 1000)
-    }
-
-    removeActiveItem() {
-        this.element.innerHTML = "";
     }
 
 }

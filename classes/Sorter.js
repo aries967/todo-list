@@ -1,4 +1,11 @@
+/**
+ * A class that control the sorting feature 
+ */
 export const Sorter = class {
+    /**
+     * Bind elements to properties, bind events, and initialize sorted items based on value in local storage
+     * @param {TodoApp} todoApp - the TodoApp instance 
+     */
     constructor(todoApp) {
         this.element = document.getElementById("todo-sort");
         this.toggleElement = document.getElementById("todo-sort__toggle");
@@ -10,6 +17,10 @@ export const Sorter = class {
         this.setSort();
     }
 
+    /**
+     * Handle the click event on options
+     * @param {PointerEvent} e 
+     */
     handleSelect(e) {
         this.sortChoice = e.currentTarget.dataset.value;
         this.setSortedItems(); 
@@ -19,10 +30,16 @@ export const Sorter = class {
         this.todoApp.renderList(this.sortedItems);
     }
 
-    handleToggle(e) {
+    /**
+     * Handle click event on the toggle element, set data-active attribute 
+     */
+    handleToggle() {
         this.toggleElement.dataset.active = this.toggleElement.dataset.active === "false" ? "true" : "false";
     }
 
+    /**
+     * Change the text on the toggle button based on the current sorting choice
+     */
     setSort() {
         Array.from(this.optionElements).forEach(element => {
             if (element.dataset.value === this.sortChoice) {
@@ -32,6 +49,9 @@ export const Sorter = class {
         this.setSortedItems();
     }
 
+    /**
+     * Set sorted items based on current sorting choice. (doesn't change the actual items array);
+     */
     setSortedItems() {
         switch (this.sortChoice) {
             case "manual":
@@ -68,10 +88,17 @@ export const Sorter = class {
         }
     }
 
+    /**
+     * Store sorting choice to local
+     */
     storeSortingChoice() {
         localStorage.setItem("sort", this.sortChoice);
     }
 
+    /**
+     * Get sorting choice from local
+     * @returns {String} - the stored sorting choice, defaults to manual
+     */
     getSortingChoice() {
         return localStorage.getItem("sort") || "manual";
     }

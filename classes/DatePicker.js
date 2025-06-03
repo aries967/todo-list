@@ -1,6 +1,13 @@
 import { dateInYYYYMMDD, dayToMilisecond, isLeapYear, relativeDate } from "../functions.js";
 
+/**
+ * A class that manages the behavior of date picker element
+ */
 export const DatePicker = class {
+    /**
+     * Bind elements to properties and bind events
+     * @param {TodoApp} todoApp - the TodoApp instance
+     */
     constructor(todoApp) {
         this.todoApp = todoApp;
         this.element = document.getElementById("date-picker");
@@ -14,6 +21,10 @@ export const DatePicker = class {
         this.nextButton.addEventListener("click", this.handleNext.bind(this))
     }
 
+    /**
+     * Set the content (e.g. month, year, all the dates) of the date picker element from a given date
+     * @param {Date} date 
+     */
     setTextContent(date) {
         const longMonths = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
         this.monthElement.textContent = longMonths[date.getMonth()];
@@ -32,12 +43,21 @@ export const DatePicker = class {
         })
     }
 
+    /**
+     * Reset the classes for the date number elements
+     */
     resetDatesElement() {
         Array.from(this.datesElement.children).forEach(child => {
             child.className = "";
         })
     }
 
+    /**
+     * Get the dates that would be shown on the date picker calendar
+     * @param {Number} year - a year integer
+     * @param {Number} month - month index (between 0 and 11)
+     * @returns {Date[]} - an array of dates
+     */
     getDates(year, month) {
         let date = new Date(year, month);
         const dates = [];
@@ -67,6 +87,13 @@ export const DatePicker = class {
         return dates;
     }
 
+    /**
+     * Show or hide the date picker element at the specified (x,y) coordinate, then bind the associated item
+     * @param {Number} x 
+     * @param {Number} y 
+     * @param {Date} date 
+     * @param {TodoItem} item 
+     */
     toggle(x, y, date, item) {
         if (item !== undefined) this.currentItem = item;
         if (date !== undefined) {
@@ -82,6 +109,10 @@ export const DatePicker = class {
         this.element.style.left = x + "px";
     }
 
+    /**
+     * Handle click event on date numbers elements
+     * @param {PointerEvent} e 
+     */
     handleDateClick(e) {
         let date = new Date(Date.parse(e.currentTarget.dataset.value));
         this.toggle(0, 0, undefined, undefined);
@@ -89,12 +120,18 @@ export const DatePicker = class {
         this.currentItem.dueDateElement.dataset.value = dateInYYYYMMDD(date)
     }
 
+    /**
+     * Handle click event on prev button
+     */
     handlePrev() {
         this.displayedDate = new Date(this.displayedDate.getFullYear(), this.displayedDate.getMonth())
         this.displayedDate = new Date(this.displayedDate - dayToMilisecond(1));
         this.setTextContent(this.displayedDate);
     }
 
+    /**
+     * Handle click event on next button
+     */
     handleNext() {
         let month = this.displayedDate.getMonth()
         let year = this.displayedDate.getFullYear()
