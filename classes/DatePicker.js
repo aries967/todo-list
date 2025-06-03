@@ -31,25 +31,23 @@ export const DatePicker = class {
         this.yearElement.textContent = date.getFullYear();
         const dates = this.getDates(date.getFullYear(), date.getMonth());
         this.resetDatesElement();
-        Array.from(this.datesElement.children).forEach((child, i) => {
-            try {
-                if (dates[i].getMonth() !== date.getMonth()) child.classList.add("grey-text");
-                if (dates[i].getDate() === this.dateNum && dates[i].getMonth() === this.month && dates[i].getFullYear() === this.year) child.classList.add("selected");
-                child.textContent = dates[i].getDate();
-                child.dataset.value = dateInYYYYMMDD(dates[i]);
-            } catch {
-                child.classList.add("hide");
-            }
-        })
+        const fragment = document.createDocumentFragment();
+        for (const d of dates) {
+            const div = document.createElement("div");
+            if (d.getMonth() !== date.getMonth()) div.classList.add("grey-text");
+            if (d.getDate() === this.dateNum && d.getMonth() === this.month && d.getFullYear() === this.year) div.classList.add("selected");
+            div.textContent = d.getDate();
+            div.dataset.value = dateInYYYYMMDD(d);
+            fragment.append(div);
+        }
+        this.datesElement.append(fragment);
     }
 
     /**
      * Reset the classes for the date number elements
      */
     resetDatesElement() {
-        Array.from(this.datesElement.children).forEach(child => {
-            child.className = "";
-        })
+        this.datesElement.innerHTML = "";
     }
 
     /**
