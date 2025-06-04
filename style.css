@@ -214,56 +214,12 @@ input + .todo-item__due-date:hover {
     margin-right: 3px;
 }
 
-.todo-item__actions-container {
-    margin-left: auto;
-    position: relative;
-}
-
-
-.todo-item__actions {
-    position: absolute;
-    right: 10px;
-    width: max-content;
-    border-radius: var(--BORDER-RADIUS);
-    overflow: hidden;
-    background-color: var(--BG-COLOR);
-    border: var(--BORDER);
-    box-shadow: var(--SHADOW);
-}
-
-.todo-item__actions > li {
-    padding: 8px 10px;
-    border-bottom: var(--BORDER);
-    font-size: 0.9em;
-    cursor: pointer;
-}
-
-.todo-item__actions >li:hover {
-    background-color: var(--BG-SECONDARY);
-}
-
-.todo-item__actions > li > i {
-    margin-right: 5px;
-}
-
-.todo-item:first-of-type .todo-item__up {
-    display: none;
-}
-
-.todo-item:last-of-type .todo-item__down {
-    display: none;
-}
-
-.todo-item__up {
+.todo-item__confirm {
     margin-left: auto;
 }
 
-.todo-item:first-child:last-child .todo-item__edit {
+.todo-item__confirm.hide ~ .todo-item__actions-toggle {
     margin-left: auto;
-}
-
-.todo-item__delete {
-    color: rgb(181, 0, 0);
 }
 
 #notification {
@@ -325,6 +281,36 @@ input + .todo-item__due-date:hover {
     background-color: var(--DARK-BG-COLOR);
     color: var(--TEXT-COLOR-ON-DARK);
     border-radius: var(--BORDER-RADIUS);
+}
+
+#actions {
+    position: absolute;
+    right: 10px;
+    width: max-content;
+    border-radius: var(--BORDER-RADIUS);
+    overflow: hidden;
+    background-color: var(--BG-COLOR);
+    border: var(--BORDER);
+    box-shadow: var(--SHADOW);
+}
+
+#actions > li {
+    padding: 8px 10px;
+    border-bottom: var(--BORDER);
+    font-size: 0.9em;
+    cursor: pointer;
+}
+
+#actions > li:hover {
+    background-color: var(--BG-SECONDARY);
+}
+
+#actions > li > i {
+    margin-right: 5px;
+}
+
+#actions__delete {
+    color: rgb(181, 0, 0);
 }
 
 @media screen and (max-width: 600px) {

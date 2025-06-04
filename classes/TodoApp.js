@@ -5,6 +5,7 @@ import { Sorter } from "./Sorter.js";
 import { dateInYYYYMMDD } from "../functions.js";
 import { DragAndDrop } from "./DragAndDrop.js";
 import { DatePicker } from "./DatePicker.js";
+import { Actions } from "./Actions.js";
 
 /**
  * A class that manages the whole application.
@@ -25,6 +26,7 @@ export const TodoApp = class {
         this.dnd = new DragAndDrop(this);
         this.notification = new Notification();
         this.datePicker = new DatePicker(new Date(2023, 7,12), this);
+        this.actions = new Actions(this);
 
         this.renderList();
         this.dnd.bindWindowListeners();
@@ -199,5 +201,10 @@ export const TodoApp = class {
             return;
         }
         this.items[index-1].element.after(item.element);
+    }
+
+    handleWindowClickEvent() {
+        window.addEventListener("click");
+        
     }
 }

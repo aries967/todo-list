@@ -61,6 +61,12 @@
                 </div>
             </div>
         </div>
+        <ul id="actions" class="hide">
+            <li id="actions__up"><i class="fa-solid fa-arrow-up"></i> Move Item Up</li>
+            <li id="actions__down"><i class="fa-solid fa-arrow-down"></i> Move Item Down</li>
+            <li id="actions__edit"><i class="fa-solid fa-pencil"></i> Edit Item</li>
+            <li id="actions__delete"><i class="fa-solid fa-trash"></i> Delete Item</li>
+        </ul>
     </main>
     <div id="templates">
         <template id="todo-item-template">
@@ -74,20 +80,11 @@
                     </label>
                     <div class="todo-item__data-container">
                         <div class="todo-item__title"></div>
-                        <div class="todo-item__due-date" data-edit="false"><i
-                                class="fa-regular fa-calendar"></i></div>
+                        <div class="todo-item__due-date" data-edit="false"><i class="fa-regular fa-calendar"></i></div>
                     </div>
-                    <div class="todo-item__actions-container">
-                        <button class="todo-item__confirm hide"><i class="fa-solid fa-check"></i></button>
-                        <button class="todo-item__cancel hide"><i class="fa-solid fa-x"></i></button>
-                        <button class="todo-item__actions-toggle"><i class="fa-solid fa-ellipsis-vertical"></i></button>
-                        <ul class="todo-item__actions hide">
-                            <li class="todo-item__up"><i class="fa-solid fa-arrow-up"></i> Move Item Up</li>
-                            <li class="todo-item__down"><i class="fa-solid fa-arrow-down"></i> Move Item Down</li>
-                            <li class="todo-item__edit"><i class="fa-solid fa-pencil"></i> Edit Item</li>
-                            <li class="todo-item__delete"><i class="fa-solid fa-trash"></i> Delete Item</li>
-                        </ul>
-                    </div>
+                    <button class="todo-item__confirm hide"><i class="fa-solid fa-check"></i></button>
+                    <button class="todo-item__cancel hide"><i class="fa-solid fa-x"></i></button>
+                    <button class="todo-item__actions-toggle"><i class="fa-solid fa-ellipsis-vertical"></i></button>
                 </div>
             </li>
         </template>
