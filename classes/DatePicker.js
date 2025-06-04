@@ -86,25 +86,28 @@ export const DatePicker = class {
     }
 
     /**
-     * Show or hide the date picker element at the specified (x,y) coordinate, then bind the associated item
-     * @param {Number} x 
-     * @param {Number} y 
-     * @param {Date} date 
+     * Show the date picker element on top of the specified item
      * @param {TodoItem} item 
      */
-    toggle(x, y, date, item) {
-        if (item !== undefined) this.currentItem = item;
-        if (date !== undefined) {
-            this.date = date;
-            this.displayedDate = date;
-            this.dateNum = date.getDate();
-            this.month = date.getMonth();
-            this.year = date.getFullYear();
-            this.setTextContent(date);
-        }
-        this.element.classList.toggle("hide");
-        this.element.style.top = y + "px";
-        this.element.style.left = x + "px";
+    showOnItem(item) {
+        const date = new Date(Date.parse(item.dueDateElement.dataset.value));
+        this.element.classList.remove("hide");
+        let rect = item.dueDateElement.getBoundingClientRect();
+        this.element.style.left = (rect.right - 10) + "px";
+        this.element.style.top = (rect.bottom) + "px";
+        this.currentItem = item;
+        this.displayedDate = date;
+        this.month = date.getMonth();
+        this.year = date.getFullYear();
+        this.dateNum = date.getDate();
+        this.setTextContent(date);
+    }
+
+    /**
+     * Hide the datepicker element
+     */
+    close() {
+        this.element.classList.add("hide");
     }
 
     /**
@@ -113,7 +116,7 @@ export const DatePicker = class {
      */
     handleDateClick(e) {
         let date = new Date(Date.parse(e.target.dataset.value));
-        this.toggle(0, 0, undefined, undefined);
+        this.close();
         this.currentItem.dueDateElement.innerHTML = `<i class="fa-regular fa-calendar"></i> ` + relativeDate(date);
         this.currentItem.dueDateElement.dataset.value = dateInYYYYMMDD(date)
     }

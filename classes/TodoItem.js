@@ -139,8 +139,7 @@ export const TodoItem = class {
                 this.completed = !this.completed;
                 break;
             case (e.target.classList.contains("todo-item__due-date") && this.titleElement.tagName === "INPUT"):
-                let rect = e.target.getBoundingClientRect();
-                this.todoApp.datePicker.toggle(rect.x + 10, rect.bottom + 5, new Date(Date.parse(this.dueDateElement.dataset.value)), this);
+                this.todoApp.datePicker.showOnItem(this);
                 break;
             case ((e.target.classList.contains("todo-item__confirm") || e.target.parentElement.classList.contains("todo-item__confirm")) && this.titleElement.value !== ""):
                 if (this.element.classList.contains("todo-item--new")) this.todoApp.items.unshift(this);
@@ -153,31 +152,11 @@ export const TodoItem = class {
                 this.toggleEditMode();
                 break;
             case (e.target.classList.contains("todo-item__actions-toggle") || e.target.parentElement.classList.contains("todo-item__actions-toggle")):
-                this.#toggleActions();
-                break;
-            case (e.target.classList.contains("todo-item__up")):
-                if (this.todoApp.sorter.sortChoice !== "manual") {
-                    this.todoApp.notification.show("You can't change item sorting on non-manual sort");
-                    return
+                if (this.todoApp.actions.element.classList.contains("hide")) {
+                    this.todoApp.actions.showOnItem(this)
+                } else {
+                    this.todoApp.actions.close();
                 }
-                this.todoApp.moveItemUp(this);
-                this.#toggleActions();
-                break;
-            case (e.target.classList.contains("todo-item__down")):
-                if (this.todoApp.sorter.sortChoice !== "manual"){
-                    this.todoApp.notification.show("You can't change item sorting on non-manual sort");
-                    return
-                }
-                this.todoApp.moveItemDown(this);
-                this.#toggleActions();
-                break;
-            case (e.target.classList.contains("todo-item__edit")):
-                this.toggleEditMode();
-                this.#toggleActions();
-                break;
-            case (e.target.classList.contains("todo-item__delete")):
-                this.todoApp.deleteItem(this);
-                this.#toggleActions();
                 break;
             case ((e.target.classList.contains("todo-item__data-container") || e.target.classList.contains("todo-item__title") || e.target.classList.contains("todo-item__due-date")) && e.detail === 2 && this.titleElement.tagName === "DIV"):
                 this.toggleEditMode();
