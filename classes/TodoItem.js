@@ -20,14 +20,14 @@ export const TodoItem = class {
         this.title = title;
         this.dueDate = dueDate;
         this.completed = completed;
-        this.setElements();
+        this.setElementSelectors();
         this.element.addEventListener("click", this.#handleClick.bind(this))
     }
 
     /**
      * Set DOM elements as properties for easy access
      */
-    setElements() {
+    setElementSelectors() {
         this.element = TodoItem.template.content.firstElementChild.cloneNode(true);
         this.element.dataset.id = this.id;
         this.titleElement = this.element.querySelector(".todo-item__title");
@@ -117,16 +117,6 @@ export const TodoItem = class {
     #toggleConfirmCancel() {
         this.confirmButton.classList.toggle("hide");
         this.cancelButton.classList.toggle("hide");
-    }
-
-    /**
-     * hide or show the actions buttons (e.g delete, edit, move up and down)
-     */
-    #toggleActions() {
-        this.todoApp.items.forEach(item => {
-            if (item.id !== this.id) item.actionsElement.classList.add("hide")
-        });
-        this.actionsElement.classList.toggle("hide");
     }
 
     /**

@@ -14,7 +14,8 @@ export const Sorter = class {
         this.optionElements.forEach(element => element.addEventListener("click", this.handleSelect.bind(this)))
         this.todoApp = todoApp;
         this.sortChoice = this.getSortingChoice();
-        this.setSort();
+        this.setButtonTextContent();
+        this.setSortedItems();
     }
 
     /**
@@ -40,13 +41,12 @@ export const Sorter = class {
     /**
      * Change the text on the toggle button based on the current sorting choice
      */
-    setSort() {
+    setButtonTextContent() {
         Array.from(this.optionElements).forEach(element => {
             if (element.dataset.value === this.sortChoice) {
                 this.toggleElement.innerHTML = '<i class="fa-solid fa-arrow-up-wide-short"></i>' + element.textContent;
             }
         });
-        this.setSortedItems();
     }
 
     /**

@@ -16,7 +16,7 @@ export const DatePicker = class {
         this.prevButton = document.getElementById("date-picker__prev");
         this.nextButton = document.getElementById("date-picker__next");
         this.datesElement = document.getElementById("date-picker__dates");
-        this.datesElement.addEventListener("click", this.handleDateClick.bind(this))
+        this.datesElement.addEventListener("click", this.handleDateNumberClick.bind(this))
         this.prevButton.addEventListener("click", this.handlePrev.bind(this));
         this.nextButton.addEventListener("click", this.handleNext.bind(this))
     }
@@ -29,7 +29,7 @@ export const DatePicker = class {
         const longMonths = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
         this.monthElement.textContent = longMonths[date.getMonth()];
         this.yearElement.textContent = date.getFullYear();
-        const dates = this.getDates(date.getFullYear(), date.getMonth());
+        const dates = this.getDateNumbers(date.getFullYear(), date.getMonth());
         this.resetDatesElement();
         const fragment = document.createDocumentFragment();
         for (const d of dates) {
@@ -56,7 +56,7 @@ export const DatePicker = class {
      * @param {Number} month - month index (between 0 and 11)
      * @returns {Date[]} - an array of dates
      */
-    getDates(year, month) {
+    getDateNumbers(year, month) {
         let date = new Date(year, month);
         const dates = [];
         let numOfDatesFromPrevMonth;
@@ -114,7 +114,7 @@ export const DatePicker = class {
      * Handle click event on date numbers elements
      * @param {PointerEvent} e 
      */
-    handleDateClick(e) {
+    handleDateNumberClick(e) {
         let date = new Date(Date.parse(e.target.dataset.value));
         this.close();
         this.currentItem.dueDateElement.innerHTML = `<i class="fa-regular fa-calendar"></i> ` + relativeDate(date);

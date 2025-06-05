@@ -36,7 +36,8 @@ export const TodoApp = class {
      * Re-render all the items in the list
      */
     renderList() {
-        this.sorter.setSort();
+        this.sorter.setButtonTextContent();
+        this.sorter.setSortedItems();
         let items = this.sorter.sortedItems;
         this.todoList.clear();
         items.forEach(item => {
