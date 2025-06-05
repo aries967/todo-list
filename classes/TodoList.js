@@ -4,20 +4,13 @@ import { htmlToElement } from "../functions.js";
  * A class for the list element
 */
 export const TodoList = class {
-    /**
-     * Select DOM element
-     * @param {TodoApp} todoApp - Teh TodoApp instance
-     */
-    constructor(todoApp) {
-        this.todoApp = todoApp;
-        this.element = document.getElementById("todo-list");
-    }
+    static element = document.getElementById("todo-list");
 
     /**
      * Convert an html string to an element then append it to the list's DOM element
      * @param {String} html - an html string
      */
-    appendHTML(html) {
+    static appendHTML(html) {
        const element =  htmlToElement(html)
        this.element.append(element);
     }
@@ -26,7 +19,7 @@ export const TodoList = class {
      * Convert an html string to an element then prepend it to the list's DOM element
      * @param {String} html - an html string 
      */
-    prependHTML(html) {
+    static prependHTML(html) {
         const element = htmlToElement(html);
         this.element.prepend(element);
     }
@@ -35,7 +28,7 @@ export const TodoList = class {
      * Append an item's DOM element to the list's DOM element
      * @param {TodoItem} item 
      */
-    appendItem(item) {
+    static appendItem(item) {
         this.element.append(item.element);
     }
 
@@ -43,7 +36,7 @@ export const TodoList = class {
      * Prepend an item's DOM element to the list's DOM element
      * @param {TodoItem} item 
      */
-    prependItem(item) {
+    static prependItem(item) {
         this.element.prepend(item.element);
     }
 
@@ -52,14 +45,14 @@ export const TodoList = class {
      * @param {Number} id - the id of an item
      * @returns {Element} - the item element with the specified id
      */
-    getItemSelector(id) {
+    static getItemSelector(id) {
         return this.element.querySelector(`[data-id="${id}"]`);
     }
 
     /**
      * Remove all todoitem element from the DOM
      */
-    clear() {
+    static clear() {
         this.element.innerHTML = "";
     }
 }

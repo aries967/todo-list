@@ -1,18 +1,16 @@
+import { TodoApp } from "./TodoApp.js";
 /**
  * A class that manages the Actions element
  */
 export const Actions = class {
-    /**
-     * Bind elements to properties and bind events
-     * @param {TodoApp} todoApp - the TodoApp instance
-     */
-    constructor(todoApp) {
-        this.todoApp = todoApp;
-        this.element = document.getElementById("actions");
-        this.upBtn = document.getElementById("actions__up");
-        this.downBtn = document.getElementById("actions__down");
-        this.editBtn = document.getElementById("actions__edit");
-        this.deleteBtn = document.getElementById("actions__delete");
+    static element = document.getElementById("actions");
+    static upBtn = document.getElementById("actions__up");
+    static downBtn = document.getElementById("actions__down");
+    static editBtn = document.getElementById("actions__edit");
+    static deleteBtn = document.getElementById("actions__delete");
+    static item;
+
+    static bindClickEvent() {
         this.element.addEventListener("click", this.handleClick.bind(this))
     }
 
@@ -20,7 +18,7 @@ export const Actions = class {
      * Show the actions element on the specified item
      * @param {TodoItem} item 
      */
-    showOnItem(item) {
+    static showOnItem(item) {
         this.element.classList.remove("hide");
         let rect = item.actionsToggleButton.getBoundingClientRect();
         this.element.style.left = (rect.left - 140) + "px";
@@ -31,7 +29,7 @@ export const Actions = class {
     /**
      * Hide the actions element
      */
-    close() {
+    static close() {
         this.element.classList.add("hide");
     }
 
@@ -39,20 +37,20 @@ export const Actions = class {
      * Delegates click event
      * @param {PointerEvent} e 
      */
-    handleClick(e) {
+    static handleClick(e) {
         this.close();
         switch(true){
             case (e.target === this.upBtn):
-                this.todoApp.moveItemUp(this.item);
+                TodoApp.moveItemUp(this.item);
                 break;
             case (e.target === this.downBtn):
-                this.todoApp.moveItemDown(this.item);
+                TodoApp.moveItemDown(this.item);
                 break;
             case (e.target === this.editBtn):
                 this.item.toggleEditMode();
                 break;
             case (e.target === this.deleteBtn):
-                this.todoApp.deleteItem(this.item);
+                TodoApp.deleteItem(this.item);
                 break;
         }
     }

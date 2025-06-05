@@ -1,6 +1,6 @@
 import { TodoApp } from "./classes/TodoApp.js";
 
-const app = new TodoApp();
+TodoApp.init();
 window.addEventListener("visibilitychange", () => {
-    app.storeItemsToLocal();
+    TodoApp.storeItemsToLocal();
 })

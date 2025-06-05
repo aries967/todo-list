@@ -1,34 +1,30 @@
+import { Notification } from "./Notification.js";
+import { Sorter } from "./Sorter.js";
+import { TodoApp } from "./TodoApp.js";
+
 /**
  * A class that manages the Drag and Drop feature
  */
 export const DragAndDrop = class {
-    mouseDownedItem;
-    mouseDownTimeout;
-    draggedItem;
-    initX;
-    initY;
-    index;
-
-    /**
-     * Bind element to property
-     * @param {TodoApp} todoApp - the TodoApp instance
-     */
-    constructor(todoApp) {
-        this.todoApp = todoApp;
-        this.element = document.getElementById("dnd-container");
-    }
+    static element = document.getElementById("dnd-container");
+    static mouseDownedItem;
+    static mouseDownTimeout;
+    static draggedItem;
+    static initX;
+    static initY;
+    static index;
 
     /**
      * Save the middle coordinates of items to a coordinates property for easier access
      */
-    setYCoordinates() {
-        this.coordinates = this.todoApp.getItemsMiddleCoordinates();
+    static setYCoordinates() {
+        this.coordinates = TodoApp.getItemsMiddleCoordinates();
     }
 
     /**
      * Bind event necessary for drag and drop to window
      */
-    bindWindowListeners() {
+    static bindWindowListeners() {
         window.addEventListener("mousemove", this.handleMousemoveAndTouchmove.bind(this))
         window.addEventListener("touchmove", this.handleMousemoveAndTouchmove.bind(this))
 
@@ -39,8 +35,8 @@ export const DragAndDrop = class {
     /**
      * Make a todo item dragged, reset coordinates
      */
-    #dragItem() {
-        this.todoApp.items = this.todoApp.items.filter(item => item.id !== this.draggedItem.id)
+    static #dragItem() {
+        TodoApp.items = TodoApp.items.filter(item => item.id !== this.draggedItem.id)
         this.setYCoordinates();
         this.element.append(this.draggedItem.element);
         document.body.style.cursor = "move";
@@ -52,7 +48,7 @@ export const DragAndDrop = class {
      * @param {Number} y - a y-coordinate
      * @returns {Number} - the index
      */
-    #getCoordinateIndex(y) {
+    static #getCoordinateIndex(y) {
         let i = 0;
         for (const yCoor of this.coordinates) {
             if (y <= yCoor) return i;
@@ -65,7 +61,7 @@ export const DragAndDrop = class {
      * Bind event listeners that are used for drag and drop to all items
      * @param {TodoItem[]} items 
      */
-    bindItemListeners(items) {
+    static bindItemListeners(items) {
         items.forEach(item => {
             item.element.addEventListener("touchstart", this.handleItemMousedownAndTouchstart.bind(this))
             item.element.addEventListener("mousedown", this.handleItemMousedownAndTouchstart.bind(this))
@@ -76,7 +72,7 @@ export const DragAndDrop = class {
      * Handle the mousemove and touchmove events on window
      * @param {MouseEvent | TouchEvent} e 
      */
-    handleMousemoveAndTouchmove(e) {
+    static handleMousemoveAndTouchmove(e) {
         e.preventDefault();
         let x,y;
         if (this.mouseDownedItem === undefined) return;
@@ -89,8 +85,8 @@ export const DragAndDrop = class {
         }
         if (Math.hypot(x - this.initX, y - this.initY) >= 50 && this.draggedItem === undefined) {
             clearTimeout(this.mouseDownTimeout)
-            if (this.todoApp.sorter.sortChoice !== "manual") {
-                this.todoApp.notification.show("You can't change item sorting on non-manual sort");
+            if (Sorter.sortChoice !== "manual") {
+                Notification.show("You can't change item sorting on non-manual sort");
                 return;
             }
             this.draggedItem = this.mouseDownedItem;
@@ -105,18 +101,18 @@ export const DragAndDrop = class {
             this.draggedItem.element.style.left = (e.clientX + 10) + "px";
         }
         this.index = this.#getCoordinateIndex(y);
-        this.todoApp.resetItemsBorderStyle();
-        this.todoApp.setBorderStyleOnItem(this.index);
+        TodoApp.resetItemsBorderStyle();
+        TodoApp.setBorderStyleOnItem(this.index);
     }
 
     /**
      * Handles the mouseup and touchend events on window
      */
-    handleMouseupAndTouchend() {
+    static handleMouseupAndTouchend() {
         clearTimeout(this.mouseDownTimeout)
         this.mouseDownedItem = undefined;
         if (this.draggedItem === undefined) return;
-        this.todoApp.insertItemOnIndex(this.index, this.draggedItem);
+        TodoApp.insertItemOnIndex(this.index, this.draggedItem);
         document.body.style.cursor = "default";
         this.draggedItem = undefined;
         this.coordinates = [];
@@ -126,8 +122,8 @@ export const DragAndDrop = class {
      * Handles the mousedown and touchstart events on todo items
      * @param {MouseEvent | TouchEvent} e 
      */
-    handleItemMousedownAndTouchstart(e) {
-        this.mouseDownedItem = this.todoApp.findItemById(Number(e.currentTarget.dataset.id));
+    static handleItemMousedownAndTouchstart(e) {
+        this.mouseDownedItem = TodoApp.findItemById(Number(e.currentTarget.dataset.id));
         if (e.type === "touchstart") {
             this.initX = e.touches[0].clientX;
             this.initY = e.touches[0].clientY;
@@ -136,8 +132,8 @@ export const DragAndDrop = class {
             this.initY = e.clientY;
         }
         this.mouseDownTimeout = setTimeout(() => {
-            if (this.todoApp.sorter.sortChoice !== "manual") {
-                this.todoApp.notification.show("You can't change item sorting on non-manual sort");
+            if (Sorter.sortChoice !== "manual") {
+                Notification.show("You can't change item sorting on non-manual sort");
                 clearTimeout(this.mouseDownTimeout);
                 return;
             }
@@ -146,8 +142,8 @@ export const DragAndDrop = class {
             this.draggedItem.element.style.top = (this.initY + 10) + "px";
             this.draggedItem.element.style.left = (this.initX + 10) + "px";
             this.index = this.#getCoordinateIndex(this.initY);
-            this.todoApp.resetItemsBorderStyle();
-            this.todoApp.setBorderStyleOnItem(this.index);
+            TodoApp.resetItemsBorderStyle();
+            TodoApp.setBorderStyleOnItem(this.index);
         }, 1000)
     }
 

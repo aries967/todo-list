@@ -1,4 +1,7 @@
 import { htmlToElement, relativeDate } from "../functions.js";
+import { Actions } from "./Actions.js";
+import { DatePicker } from "./DatePicker.js";
+import { TodoApp } from "./TodoApp.js";
 
 /**
  * A class for each todo items
@@ -15,7 +18,6 @@ export const TodoItem = class {
      * @param {TodoApp} todoApp - the TodoApp instance
      */
     constructor(id, title, dueDate, completed, todoApp) {
-        this.todoApp = todoApp;
         this.id = id;
         this.title = title;
         this.dueDate = dueDate;
@@ -103,7 +105,7 @@ export const TodoItem = class {
     #bindTitleElementEnterEvent() {
         this.titleElement.addEventListener("keydown", (e) => {
             if (e.code === "Enter" && e.currentTarget.value !== "") {
-                if (this.element.classList.contains("todo-item--new")) this.todoApp.items.unshift(this);
+                if (this.element.classList.contains("todo-item--new")) TodoApp.items.unshift(this);
                 this.edit(this.titleElement.value, this.dueDateElement.dataset.value)
                 this.toggleEditMode()
             }
@@ -123,7 +125,7 @@ export const TodoItem = class {
      * hide or show the actions buttons (e.g delete, edit, move up and down)
      */
     #toggleActions() {
-        this.todoApp.items.forEach(item => {
+        TodoApp.items.forEach(item => {
             if (item.id !== this.id) item.actionsElement.classList.add("hide")
         });
         this.actionsElement.classList.toggle("hide");
@@ -139,10 +141,10 @@ export const TodoItem = class {
                 this.completed = !this.completed;
                 break;
             case (e.target.classList.contains("todo-item__due-date") && this.titleElement.tagName === "INPUT"):
-                this.todoApp.datePicker.showOnItem(this);
+                DatePicker.showOnItem(this);
                 break;
             case ((e.target.classList.contains("todo-item__confirm") || e.target.parentElement.classList.contains("todo-item__confirm")) && this.titleElement.value !== ""):
-                if (this.element.classList.contains("todo-item--new")) this.todoApp.items.unshift(this);
+                if (this.element.classList.contains("todo-item--new")) TodoApp.items.unshift(this);
                 this.edit(this.titleElement.value, this.dueDateElement.dataset.value);
                 this.toggleEditMode();
                 break;
@@ -152,10 +154,10 @@ export const TodoItem = class {
                 this.toggleEditMode();
                 break;
             case (e.target.classList.contains("todo-item__actions-toggle") || e.target.parentElement.classList.contains("todo-item__actions-toggle")):
-                if (this.todoApp.actions.element.classList.contains("hide")) {
-                    this.todoApp.actions.showOnItem(this)
+                if (Actions.element.classList.contains("hide")) {
+                    Actions.showOnItem(this)
                 } else {
-                    this.todoApp.actions.close();
+                    Actions.close();
                 }
                 break;
             case ((e.target.classList.contains("todo-item__data-container") || e.target.classList.contains("todo-item__title") || e.target.classList.contains("todo-item__due-date")) && e.detail === 2 && this.titleElement.tagName === "DIV"):

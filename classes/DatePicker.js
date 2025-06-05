@@ -4,18 +4,14 @@ import { dateInYYYYMMDD, dayToMilisecond, isLeapYear, relativeDate } from "../fu
  * A class that manages the behavior of date picker element
  */
 export const DatePicker = class {
-    /**
-     * Bind elements to properties and bind events
-     * @param {TodoApp} todoApp - the TodoApp instance
-     */
-    constructor(todoApp) {
-        this.todoApp = todoApp;
-        this.element = document.getElementById("date-picker");
-        this.monthElement = document.getElementById("date-picker__month");
-        this.yearElement = document.getElementById("date-picker__year");
-        this.prevButton = document.getElementById("date-picker__prev");
-        this.nextButton = document.getElementById("date-picker__next");
-        this.datesElement = document.getElementById("date-picker__dates");
+    static element = document.getElementById("date-picker");
+    static monthElement = document.getElementById("date-picker__month");
+    static yearElement = document.getElementById("date-picker__year");
+    static prevButton = document.getElementById("date-picker__prev");
+    static nextButton = document.getElementById("date-picker__next");
+    static datesElement = document.getElementById("date-picker__dates");
+
+    static bindClickEvents() { 
         this.datesElement.addEventListener("click", this.handleDateClick.bind(this))
         this.prevButton.addEventListener("click", this.handlePrev.bind(this));
         this.nextButton.addEventListener("click", this.handleNext.bind(this))
@@ -25,7 +21,7 @@ export const DatePicker = class {
      * Set the content (e.g. month, year, all the dates) of the date picker element from a given date
      * @param {Date} date 
      */
-    setTextContent(date) {
+    static setTextContent(date) {
         const longMonths = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
         this.monthElement.textContent = longMonths[date.getMonth()];
         this.yearElement.textContent = date.getFullYear();
@@ -46,7 +42,7 @@ export const DatePicker = class {
     /**
      * Reset the classes for the date number elements
      */
-    resetDatesElement() {
+    static resetDatesElement() {
         this.datesElement.innerHTML = "";
     }
 
@@ -56,7 +52,7 @@ export const DatePicker = class {
      * @param {Number} month - month index (between 0 and 11)
      * @returns {Date[]} - an array of dates
      */
-    getDates(year, month) {
+    static getDates(year, month) {
         let date = new Date(year, month);
         const dates = [];
         let numOfDatesFromPrevMonth;
@@ -89,7 +85,7 @@ export const DatePicker = class {
      * Show the date picker element on top of the specified item
      * @param {TodoItem} item 
      */
-    showOnItem(item) {
+    static showOnItem(item) {
         const date = new Date(Date.parse(item.dueDateElement.dataset.value));
         this.element.classList.remove("hide");
         let rect = item.dueDateElement.getBoundingClientRect();
@@ -106,7 +102,7 @@ export const DatePicker = class {
     /**
      * Hide the datepicker element
      */
-    close() {
+    static close() {
         this.element.classList.add("hide");
     }
 
@@ -114,7 +110,7 @@ export const DatePicker = class {
      * Handle click event on date numbers elements
      * @param {PointerEvent} e 
      */
-    handleDateClick(e) {
+    static handleDateClick(e) {
         let date = new Date(Date.parse(e.target.dataset.value));
         this.close();
         this.currentItem.dueDateElement.innerHTML = `<i class="fa-regular fa-calendar"></i> ` + relativeDate(date);
@@ -124,7 +120,7 @@ export const DatePicker = class {
     /**
      * Handle click event on prev button
      */
-    handlePrev() {
+    static handlePrev() {
         this.displayedDate = new Date(this.displayedDate.getFullYear(), this.displayedDate.getMonth())
         this.displayedDate = new Date(this.displayedDate - dayToMilisecond(1));
         this.setTextContent(this.displayedDate);
@@ -133,7 +129,7 @@ export const DatePicker = class {
     /**
      * Handle click event on next button
      */
-    handleNext() {
+    static handleNext() {
         let month = this.displayedDate.getMonth()
         let year = this.displayedDate.getFullYear()
         if (month === 11) {

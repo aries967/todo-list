@@ -1,46 +1,48 @@
+import { TodoApp } from "./TodoApp.js";
+
 /**
  * A class that control the sorting feature 
  */
 export const Sorter = class {
-    /**
-     * Bind elements to properties, bind events, and initialize sorted items based on value in local storage
-     * @param {TodoApp} todoApp - the TodoApp instance 
-     */
-    constructor(todoApp) {
-        this.element = document.getElementById("todo-sort");
-        this.toggleElement = document.getElementById("todo-sort__toggle");
+    static element = document.getElementById("todo-sort");
+    static toggleElement =  document.getElementById("todo-sort__toggle");
+    static optionElements = document.querySelectorAll("#todo-sort__options > li");
+    static sortChoice;
+    static sortedItems;
+
+    static bindClickEvents() {
         this.toggleElement.addEventListener("click", this.handleToggle.bind(this));
-        this.optionElements = document.querySelectorAll("#todo-sort__options > li");
         this.optionElements.forEach(element => element.addEventListener("click", this.handleSelect.bind(this)))
-        this.todoApp = todoApp;
+    }
+
+    static init() {
         this.sortChoice = this.getSortingChoice();
-        this.setSort();
     }
 
     /**
      * Handle the click event on options
      * @param {PointerEvent} e 
      */
-    handleSelect(e) {
+    static handleSelect(e) {
         this.sortChoice = e.currentTarget.dataset.value;
         this.setSortedItems(); 
         this.toggleElement.innerHTML = '<i class="fa-solid fa-arrow-up-wide-short"></i> ' + e.currentTarget.textContent;  
         this.handleToggle();
         this.storeSortingChoice()
-        this.todoApp.renderList(this.sortedItems);
+        TodoApp.renderList(this.sortedItems);
     }
 
     /**
      * Handle click event on the toggle element, set data-active attribute 
      */
-    handleToggle() {
+    static handleToggle() {
         this.toggleElement.dataset.active = this.toggleElement.dataset.active === "false" ? "true" : "false";
     }
 
     /**
      * Change the text on the toggle button based on the current sorting choice
      */
-    setSort() {
+    static setSort() {
         Array.from(this.optionElements).forEach(element => {
             if (element.dataset.value === this.sortChoice) {
                 this.toggleElement.innerHTML = '<i class="fa-solid fa-arrow-up-wide-short"></i>' + element.textContent;
@@ -52,13 +54,13 @@ export const Sorter = class {
     /**
      * Set sorted items based on current sorting choice. (doesn't change the actual items array);
      */
-    setSortedItems() {
+    static setSortedItems() {
         switch (this.sortChoice) {
             case "manual":
-                this.sortedItems = this.todoApp.items;
+                this.sortedItems = TodoApp.items;
                 break;
             case "a-z":
-                this.sortedItems = this.todoApp.items.toSorted((a,b) => {
+                this.sortedItems = TodoApp.items.toSorted((a,b) => {
                     if (a.title.toLowerCase() === b.title.toLowerCase()) {
                         return 0
                     } else if (a.title.toLowerCase() < b.title.toLowerCase()) {
@@ -69,7 +71,7 @@ export const Sorter = class {
                 });
                 break;
             case "z-a":
-                this.sortedItems = this.todoApp.items.toSorted((a,b) => {
+                this.sortedItems = TodoApp.items.toSorted((a,b) => {
                     if (a.title.toLowerCase() === b.title.toLowerCase()) {
                         return 0
                     } else if (a.title.toLowerCase() < b.title.toLowerCase()) {
@@ -80,10 +82,10 @@ export const Sorter = class {
                 })
                 break;
             case "date-asc":
-                this.sortedItems = this.todoApp.items.toSorted((a,b) => Date.parse(a.dueDate) - Date.parse(b.dueDate));
+                this.sortedItems = TodoApp.items.toSorted((a,b) => Date.parse(a.dueDate) - Date.parse(b.dueDate));
                 break;
             case "date-desc":
-                this.sortedItems = this.todoApp.items.toSorted((a,b) => Date.parse(b.dueDate) - Date.parse(a.dueDate));
+                this.sortedItems = TodoApp.items.toSorted((a,b) => Date.parse(b.dueDate) - Date.parse(a.dueDate));
                 break;
         }
     }
@@ -91,7 +93,7 @@ export const Sorter = class {
     /**
      * Store sorting choice to local
      */
-    storeSortingChoice() {
+    static storeSortingChoice() {
         localStorage.setItem("sort", this.sortChoice);
     }
 
@@ -99,7 +101,7 @@ export const Sorter = class {
      * Get sorting choice from local
      * @returns {String} - the stored sorting choice, defaults to manual
      */
-    getSortingChoice() {
+    static getSortingChoice() {
         return localStorage.getItem("sort") || "manual";
     }
 }
