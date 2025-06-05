@@ -165,4 +165,8 @@ export const TodoItem = class {
                 break;
         }
     }
+
+    applyEventListener(event, handler) {
+        this.element.addEventListener(event, handler)
+    }
 }

@@ -14,6 +14,8 @@ import { Notification } from "./Notification.js";
 export const TodoApp = class {
     static items = this.getItemsFromLocal();
     static init() {
+        this.items.forEach(item => item.applyEventListener("mousedown", DragAndDrop.handleItemMousedownAndTouchstart.bind(DragAndDrop)));
+        this.items.forEach(item => item.applyEventListener("touchstart", DragAndDrop.handleItemMousedownAndTouchstart.bind(DragAndDrop)));
         Sorter.init();
         Sorter.bindClickEvents();
         Sorter.setSort();
@@ -22,21 +24,8 @@ export const TodoApp = class {
         Actions.bindClickEvent();
         DatePicker.bindClickEvents();
 
-        this.renderList();
+        TodoList.clearAndFillWithChildren(...Sorter.sortedItems.map(item => item.element));
         DragAndDrop.bindWindowListeners();
-    }
-
-    /**
-     * Re-render all the items in the list
-     */
-    static renderList() {
-        Sorter.setSort();
-        let items = Sorter.sortedItems;
-        TodoList.clear();
-        items.forEach(item => {
-            TodoList.appendItem(item);
-        })
-        DragAndDrop.bindItemListeners(this.items);
     }
 
     /**
@@ -191,7 +180,7 @@ export const TodoApp = class {
         this.resetItemsBorderStyle();
         this.items.splice(index, 0, item);
         if (index === 0) {
-            TodoList.prependItem(item);
+            TodoList.prependElements(item.element);
             return;
         }
         this.items[index-1].element.after(item.element);

@@ -1,4 +1,7 @@
 import { htmlToElement } from "../functions.js";
+import { Sorter } from "./Sorter.js";
+import { DragAndDrop } from "./DragAndDrop.js";
+import { TodoApp } from "./TodoApp.js";
 
 /** 
  * A class for the list element
@@ -7,46 +10,25 @@ export const TodoList = class {
     static element = document.getElementById("todo-list");
 
     /**
-     * Convert an html string to an element then append it to the list's DOM element
-     * @param {String} html - an html string
+     * @param  {...Element} elements
      */
-    static appendHTML(html) {
-       const element =  htmlToElement(html)
-       this.element.append(element);
+    static appendElements(...elements) {
+        this.element.append(...elements);
     }
 
     /**
-     * Convert an html string to an element then prepend it to the list's DOM element
-     * @param {String} html - an html string 
+     * @param  {...Element} elements
      */
-    static prependHTML(html) {
-        const element = htmlToElement(html);
-        this.element.prepend(element);
+    static prependElements(...elements) {
+        this.element.prepend(...elements);
     }
 
     /**
-     * Append an item's DOM element to the list's DOM element
-     * @param {TodoItem} item 
+     * @param  {...Node} children 
      */
-    static appendItem(item) {
-        this.element.append(item.element);
-    }
-
-        /**
-     * Prepend an item's DOM element to the list's DOM element
-     * @param {TodoItem} item 
-     */
-    static prependItem(item) {
-        this.element.prepend(item.element);
-    }
-
-    /**
-     * Select and return an item element with specified id
-     * @param {Number} id - the id of an item
-     * @returns {Element} - the item element with the specified id
-     */
-    static getItemSelector(id) {
-        return this.element.querySelector(`[data-id="${id}"]`);
+    static clearAndFillWithChildren(...children) {
+        this.clear();
+        this.appendElements(...children);
     }
 
     /**

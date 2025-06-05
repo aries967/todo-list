@@ -1,4 +1,5 @@
 import { TodoApp } from "./TodoApp.js";
+import { TodoList } from "./TodoList.js";
 
 /**
  * A class that control the sorting feature 
@@ -29,7 +30,7 @@ export const Sorter = class {
         this.toggleElement.innerHTML = '<i class="fa-solid fa-arrow-up-wide-short"></i> ' + e.currentTarget.textContent;  
         this.handleToggle();
         this.storeSortingChoice()
-        TodoApp.renderList(this.sortedItems);
+        TodoList.clearAndFillWithChildren(...this.sortedItems.map(item => item.element));
     }
 
     /**
