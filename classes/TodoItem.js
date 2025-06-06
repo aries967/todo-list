@@ -1,6 +1,7 @@
 import { htmlToElement, relativeDate } from "../functions.js";
 import { Actions } from "./Actions.js";
 import { DatePicker } from "./DatePicker.js";
+import { DragAndDrop } from "./DragAndDrop.js";
 import { TodoApp } from "./TodoApp.js";
 
 /**
@@ -94,9 +95,11 @@ export const TodoItem = class {
         }
 
         this.titleElement = this.element.querySelector(".todo-item__title");
-        if (this.titleElement.tagName === "INPUT") this.#bindTitleElementEnterEvent()
-        this.titleElement.focus();
-        this.titleElement.select();
+        if (this.titleElement.tagName === "INPUT") {
+            this.#bindTitleElementEnterEvent()
+            this.titleElement.focus();
+            this.titleElement.select();
+        }
     }
 
     /**
@@ -105,7 +108,7 @@ export const TodoItem = class {
     #bindTitleElementEnterEvent() {
         this.titleElement.addEventListener("keydown", (e) => {
             if (e.code === "Enter" && e.currentTarget.value !== "") {
-                if (this.element.classList.contains("todo-item--new")) TodoApp.items.unshift(this);
+                if (this.element.classList.contains("todo-item--new")) { TodoApp.items.unshift(this); DragAndDrop.bindItemListeners(TodoApp.items) }
                 this.edit(this.titleElement.value, this.dueDateElement.dataset.value)
                 this.toggleEditMode()
             }
@@ -136,7 +139,7 @@ export const TodoItem = class {
      * @param {PointerEvent} e 
      */
     #handleClick(e) {
-        switch (true){
+        switch (true) {
             case (e.target.classList.contains("todo-item__checkbox")):
                 this.completed = !this.completed;
                 break;
@@ -144,7 +147,7 @@ export const TodoItem = class {
                 DatePicker.showOnItem(this);
                 break;
             case ((e.target.classList.contains("todo-item__confirm") || e.target.parentElement.classList.contains("todo-item__confirm")) && this.titleElement.value !== ""):
-                if (this.element.classList.contains("todo-item--new")) TodoApp.items.unshift(this);
+                if (this.element.classList.contains("todo-item--new")) { TodoApp.items.unshift(this); DragAndDrop.bindItemListeners(TodoApp.items); }
                 this.edit(this.titleElement.value, this.dueDateElement.dataset.value);
                 this.toggleEditMode();
                 break;

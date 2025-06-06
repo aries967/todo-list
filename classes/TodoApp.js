@@ -64,7 +64,6 @@ export const TodoApp = class {
         TodoList.prependElements(item.element);
         item.element.classList.add("todo-item--new");
         item.toggleEditMode();
-        DragAndDrop.bindItemListeners(this.items);
     }
 
     /**
