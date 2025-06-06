@@ -185,4 +185,9 @@ export const TodoApp = class {
         }
         this.items[index-1].element.after(item.element);
     }
+
+    handleWindowClickEvent() {
+        window.addEventListener("click");
+        
+    }
 }

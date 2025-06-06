@@ -83,6 +83,7 @@ export const DatePicker = class {
 
     /**
      * Show the date picker element on top of the specified item
+     * Show the date picker element on top of the specified item
      * @param {TodoItem} item 
      */
     static showOnItem(item) {
@@ -112,6 +113,7 @@ export const DatePicker = class {
      */
     static handleDateClick(e) {
         let date = new Date(Date.parse(e.target.dataset.value));
+        this.close();
         this.close();
         this.currentItem.dueDateElement.innerHTML = `<i class="fa-regular fa-calendar"></i> ` + relativeDate(date);
         this.currentItem.dueDateElement.dataset.value = dateInYYYYMMDD(date)
