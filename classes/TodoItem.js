@@ -22,14 +22,14 @@ export const TodoItem = class {
         this.title = title;
         this.dueDate = dueDate;
         this.completed = completed;
-        this.setElements();
+        this.setElementSelectors();
         this.element.addEventListener("click", this.#handleClick.bind(this))
     }
 
     /**
      * Set DOM elements as properties for easy access
      */
-    setElements() {
+    setElementSelectors() {
         this.element = TodoItem.template.content.firstElementChild.cloneNode(true);
         this.element.dataset.id = this.id;
         this.titleElement = this.element.querySelector(".todo-item__title");

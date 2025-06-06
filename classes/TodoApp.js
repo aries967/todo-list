@@ -61,7 +61,7 @@ export const TodoApp = class {
     static addItem() {
         const id = Date.now();
         const item = new TodoItem(id, "", dateInYYYYMMDD(new Date()), false, this);
-        TodoList.prependItem(item);
+        TodoList.prependElements(item.element);
         item.element.classList.add("todo-item--new");
         item.toggleEditMode();
         DragAndDrop.bindItemListeners(this.items);

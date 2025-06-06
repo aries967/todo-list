@@ -25,7 +25,7 @@ export const DatePicker = class {
         const longMonths = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
         this.monthElement.textContent = longMonths[date.getMonth()];
         this.yearElement.textContent = date.getFullYear();
-        const dates = this.getDates(date.getFullYear(), date.getMonth());
+        const dates = this.getDateNumbers(date.getFullYear(), date.getMonth());
         this.resetDatesElement();
         const fragment = document.createDocumentFragment();
         for (const d of dates) {

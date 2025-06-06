@@ -49,7 +49,6 @@ export const Sorter = class {
                 this.toggleElement.innerHTML = '<i class="fa-solid fa-arrow-up-wide-short"></i>' + element.textContent;
             }
         });
-        this.setSortedItems();
     }
 
     /**
